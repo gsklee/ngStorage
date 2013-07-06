@@ -1,5 +1,7 @@
 'use strict';
 
+(function() {
+
 /**
  * @ngdoc overview
  * @name ngStorage
@@ -64,3 +66,5 @@ function _storageFactory(storageType) {
         return storage;
     };
 }
+
+})();
