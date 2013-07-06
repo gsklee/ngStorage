@@ -25,13 +25,19 @@ factory('$localStorage', _storageFactory('localStorage')).
 
 factory('$sessionStorage', _storageFactory('sessionStorage'));
 
-function _storageFactory(storageType){
+function _storageFactory(storageType) {
     return function(
         $browser,
         $window
     ){
         var webStorage = $window[storageType],
-            storage = {},
+            storage = {
+                $clear: function() {
+                    for (var k in storage) {
+                        '$clear' === k || delete storage[k];
+                    }
+                }
+            },
             lastStorage;
 
         for (var i = 0, k; k = webStorage.key(i); i++) {
@@ -42,8 +48,13 @@ function _storageFactory(storageType){
 
         $browser.addPollFn(function() {
             if (!angular.equals(storage, lastStorage)) {
+
+                webStorage.clear();
+
                 angular.forEach(storage, function(v, k) {
-                    webStorage.setItem(k, angular.toJson(v));
+                    if (angular.isDefined(v) && '$clear' !== k) {
+                        webStorage.setItem(k, angular.toJson(v));
+                    }
                 });
 
                 lastStorage = angular.copy(storage);
