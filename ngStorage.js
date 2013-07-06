@@ -1,27 +1,9 @@
 'use strict';
 
-function _storage($browser, x) {
-    var storage = {},
-        lastStorage;
-
-    for (var i = 0, _k; _k = x.key(i); i++) {
-        storage[_k] = angular.fromJson(x.getItem(_k));
-    }
-
-    lastStorage = angular.copy(storage);
-
-    $browser.addPollFn(function() {
-        if (!angular.equals(storage, lastStorage)) {
-            angular.forEach(storage, function(_v, _k) {
-                x.setItem(_k, angular.toJson(_v));
-            });
-
-            lastStorage = angular.copy(storage);
-        }
-    });
-
-    return storage;
-}
+/**
+ * @ngdoc overview
+ * @name ngStorage
+ */
 
 angular.module('ngStorage', []).
 
@@ -32,12 +14,7 @@ angular.module('ngStorage', []).
  * @requires $window
  */
 
-factory('$localStorage', function(
-    $browser,
-    $window
-){
-    return _storage($browser, $window.localStorage);
-}).
+factory('$localStorage', _storageFactory('localStorage')).
 
 /**
  * @ngdoc object
@@ -46,9 +23,33 @@ factory('$localStorage', function(
  * @requires $window
  */
 
-factory('$sessionStorage', function(
-    $browser,
-    $window
-){
-    return _storage($browser, $window.sessionStorage);
-});
+factory('$sessionStorage', _storageFactory('sessionStorage'));
+
+function _storageFactory(storageType){
+    return function(
+        $browser,
+        $window
+    ){
+        var webStorage = $window[storageType],
+            storage = {},
+            lastStorage;
+
+        for (var i = 0, k; k = webStorage.key(i); i++) {
+            storage[k] = angular.fromJson(webStorage.getItem(k));
+        }
+
+        lastStorage = angular.copy(storage);
+
+        $browser.addPollFn(function() {
+            if (!angular.equals(storage, lastStorage)) {
+                angular.forEach(storage, function(v, k) {
+                    webStorage.setItem(k, angular.toJson(v));
+                });
+
+                lastStorage = angular.copy(storage);
+            }
+        });
+
+        return storage;
+    };
+}
