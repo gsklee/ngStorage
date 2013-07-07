@@ -13,6 +13,13 @@ An [AngularJS](https://github.com/angular/angular.js) module that makes Web Stor
  
 * **No Cookie Fallback** - With Web Storage being [readily available](http://caniuse.com/namevalue-storage) in [all the browsers AngularJS officially supports](http://docs.angularjs.org/misc/faq#canidownloadthesourcebuildandhosttheangularjsenvironmentlocally), such fallback is largely redundant. 
 
+Install
+=======
+
+```bash
+bower install ngstorage
+```
+
 Usage
 =====
 
