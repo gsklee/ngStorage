@@ -99,6 +99,13 @@ Theoretically this can also be done in the plain ol' way but, we've got a conven
 $localStorage.$clear();
 ````
 
+#### Permitted Values | [Demo](http://plnkr.co/edit/n0acYLdhk3AeZmPOGY9Z)
+
+You can store anything except those [not supported by JSON](http://www.json.org/js.html):
+
+* `Infinity`, `NaN` - Will be replaced with `null`.
+* `undefined`, Function - Will be removed.
+
 Todos
 =====
 
