@@ -35,10 +35,14 @@
         ){
             var webStorage = $window[storageType],
                 $storage = {
-                    $clear: function() {
+                    $reset: function(newItems) {
                         for (var k in $storage) {
-                            '$clear' === k || delete $storage[k];
+                            '$reset' === k || delete $storage[k];
                         }
+
+                        angular.forEach(newItems, function(v, k) {
+                            $storage[k] = v;
+                        });
                     }
                 },
                 _last$storage;
@@ -52,7 +56,7 @@
             $browser.addPollFn(function() {
                 if (!angular.equals($storage, _last$storage)) {
                     angular.forEach($storage, function(v, k) {
-                        if (angular.isDefined(v) && '$clear' !== k) {
+                        if (angular.isDefined(v) && '$reset' !== k) {
 
                             // Remove $$hashKey and other things that cannot be stringified
                             $storage[k] = angular.fromJson(angular.toJson(v));
