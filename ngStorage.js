@@ -51,9 +51,12 @@
 
             $browser.addPollFn(function() {
                 if (!angular.equals($storage, _last$storage)) {
-
                     angular.forEach($storage, function(v, k) {
                         if (angular.isDefined(v) && '$clear' !== k) {
+
+                            // Remove $$hashKey and other things that cannot be stringified
+                            $storage[k] = angular.fromJson(angular.toJson(v));
+
                             webStorage.setItem(k, angular.toJson(v));
                         }
 
@@ -65,6 +68,8 @@
                     });
 
                     _last$storage = angular.copy($storage);
+
+                    $rootScope.$digest();
                 }
             });
 
