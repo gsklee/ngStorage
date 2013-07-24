@@ -30,7 +30,12 @@
     factory('$sessionStorage', _storageFactory('sessionStorage'));
 
     function _storageFactory(storageType) {
-        return function(
+        return [
+            '$rootScope',
+            '$browser',
+            '$window',
+
+        function(
             $rootScope,
             $browser,
             $window
@@ -95,7 +100,7 @@
             });
 
             return $storage;
-        };
+        }];
     }
 
 })();
