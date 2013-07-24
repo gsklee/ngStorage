@@ -38,28 +38,24 @@
             var webStorage = $window[storageType],
                 $storage = {
                     $default: function(items) {
-                        angular.forEach(items, function(v, k) {
-                            angular.isDefined($storage[k]) || ($storage[k] = v);
-                        });
+                        for (var k in items) {
+                            angular.isDefined($storage[k]) || ($storage[k] = items[k]);
+                        }
 
                         return $storage;
                     },
                     $reset: function(items) {
                         for (var k in $storage) {
-                            /^\$/.test(k) || delete $storage[k];
+                            '$' === k[0] || delete $storage[k];
                         }
 
-                        angular.forEach(items, function(v, k) {
-                            $storage[k] = v;
-                        });
-
-                        return $storage;
+                        return $storage.$default(items);
                     }
                 },
                 _last$storage;
 
             for (var i = 0, k; k = webStorage.key(i); i++) {
-                $storage[k] = angular.fromJson(webStorage.getItem(k));
+                'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
             }
 
             _last$storage = angular.copy($storage);
@@ -67,33 +63,35 @@
             $browser.addPollFn(function() {
                 if (!angular.equals($storage, _last$storage)) {
                     angular.forEach($storage, function(v, k) {
-                        if (angular.isDefined(v) && !/^\$/.test(k)) {
+                        if (angular.isDefined(v) && '$' !== k[0]) {
 
                             // Remove $$hashKey and other things that cannot be stringified
                             $storage[k] = angular.fromJson(angular.toJson(v));
 
-                            webStorage.setItem(k, angular.toJson(v));
+                            webStorage.setItem('ngStorage-' + k, angular.toJson(v));
                         }
 
                         delete _last$storage[k];
                     });
 
-                    angular.forEach(_last$storage, function(v, k) {
-                        webStorage.removeItem(k);
-                    });
+                    for (var k in _last$storage) {
+                        webStorage.removeItem('ngStorage-' + k);
+                    }
 
                     _last$storage = angular.copy($storage);
 
-                    $rootScope.$digest();
+                    $rootScope.$apply();
                 }
             });
 
             'localStorage' === storageType && angular.element($window).bind('storage', function(event) {
-                event.newValue ? $storage[event.key] = angular.fromJson(event.newValue) : delete $storage[event.key];
+                if ('ngStorage-' === event.key.slice(0, 10)) {
+                    event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
 
-                _last$storage = angular.copy($storage);
+                    _last$storage = angular.copy($storage);
 
-                $rootScope.$digest();
+                    $rootScope.$apply();
+                }
             });
 
             return $storage;
