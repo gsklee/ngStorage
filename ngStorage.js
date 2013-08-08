@@ -59,8 +59,7 @@
                 },
                 _last$storage;
 
-            for (var i = 0, k; i < webStorage.length; i++) {
-                k = webStorage.key(i);
+            for (var i = 0, k; i < webStorage.length && (k = webStorage.key(i)); i++) {
                 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
             }
 
