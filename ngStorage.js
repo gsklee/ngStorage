@@ -30,7 +30,12 @@
     factory('$sessionStorage', _storageFactory('sessionStorage'));
 
     function _storageFactory(storageType) {
-        return function(
+        return [
+            '$rootScope',
+            '$browser',
+            '$window',
+
+        function(
             $rootScope,
             $browser,
             $window
@@ -54,7 +59,7 @@
                 },
                 _last$storage;
 
-            for (var i = 0, k; k = webStorage.key(i); i++) {
+            for (var i = 0, k; i < webStorage.length && (k = webStorage.key(i)); i++) {
                 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
             }
 
@@ -95,7 +100,7 @@
             });
 
             return $storage;
-        };
+        }];
     }
 
 })();
