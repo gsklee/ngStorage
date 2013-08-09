@@ -35,7 +35,7 @@ angular.module('app', [
 ){});
 ```
 
-### Read and Write | [Demo](http://plnkr.co/edit/3vfRkvG7R9DgQxtWbGHz)
+### Read and Write | [Demo](http://plnkr.co/edit/3vfRkvG7R9DgQxtWbGHz?p=preview)
 
 Pass `$localStorage` (or `$sessionStorage`) by reference to a hook under `$scope` in plain ol' JavaScript:
 
@@ -61,7 +61,7 @@ And use it like you-already-know:
 
 With this setup, changes will be automatically sync'd between `$scope.$storage`, `$localStorage`, and localStorage - even across different browser tabs!
 
-### Read and Write Alternative (Not Recommended) | [Demo](http://plnkr.co/edit/9ZmkzRkYzS3iZkG8J5IK)
+### Read and Write Alternative (Not Recommended) | [Demo](http://plnkr.co/edit/9ZmkzRkYzS3iZkG8J5IK?p=preview)
 
 If you're not fond of the presence of `$scope.$storage`, you can always use watchers:
 
@@ -81,7 +81,7 @@ $scope.$watch(function() {
 
 This, however, is not the way ngStorage is designed to be used with. As can be easily seen by comparing the demos, this approach is way more verbose, and may have potential performance implications as the values being watched quickly grow.
 
-### Delete | [Demo](http://plnkr.co/edit/o4w3VGqmp8opfrWzvsJy)
+### Delete | [Demo](http://plnkr.co/edit/o4w3VGqmp8opfrWzvsJy?p=preview)
 
 Plain ol' JavaScript again, what else could you better expect?
 
@@ -93,7 +93,7 @@ delete $localStorage.counter;
 
 This will delete the corresponding entry inside the Web Storage.
 
-### Delete Everything | [Demo](http://plnkr.co/edit/YiG28KTFdkeFXskolZqs)
+### Delete Everything | [Demo](http://plnkr.co/edit/YiG28KTFdkeFXskolZqs?p=preview)
 
 If you wish to clear the Storage in one go, use the `$reset()` method:
 
@@ -109,7 +109,7 @@ $localStorage.$reset();
 > });
 > ```
 
-### Permitted Values | [Demo](http://plnkr.co/edit/n0acYLdhk3AeZmPOGY9Z)
+### Permitted Values | [Demo](http://plnkr.co/edit/n0acYLdhk3AeZmPOGY9Z?p=preview)
 
 You can store anything except those [not supported by JSON](http://www.json.org/js.html):
 

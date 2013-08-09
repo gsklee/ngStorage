@@ -1,6 +1,6 @@
 {
     "name": "ngstorage",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "main": "./ngStorage.js",
     "dependencies": {
         "angular": "1.0.7"
