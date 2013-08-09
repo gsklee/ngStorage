@@ -59,7 +59,7 @@
                     },
                     _last$storage;
 
-                // #8
+                // (#8) `i < webStorage.length` is needed for IE9
                 for (var i = 0, k; i < webStorage.length && (k = webStorage.key(i)); i++) {
                     'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
                 }
@@ -90,7 +90,8 @@
                     }
                 });
 
-                'localStorage' === storageType && angular.element($window).bind('storage', function(event) {
+                // (#6) Use `$window.addEventListener` to avoid the jQuery-specific `event.originalEvent`
+                'localStorage' === storageType && $window.addEventListener('storage', function(event) {
                     if ('ngStorage-' === event.key.slice(0, 10)) {
                         event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
 
