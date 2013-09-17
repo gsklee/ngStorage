@@ -62,8 +62,10 @@
                     _last$storage;
 
                 // (#8) `i < webStorage.length` is needed for IE9
-                for (var i = 0, k; i < webStorage.length && (k = webStorage.key(i)); i++) {
-                    'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                for (var i = 0, k; i < webStorage.length; i++) {
+                    if (k = webStorage.key(i)) {
+                      'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                    }
                 }
 
                 _last$storage = angular.copy($storage);
