@@ -59,6 +59,9 @@
                     },
                     _last$storage;
 
+                //degrade gracefully in Internet Explorer when loading page from filesystem
+                webStorage = webStorage || { setItem: function() {}, removeItem:function() {} };
+                
                 // (#8) `i < webStorage.length` is needed for IE9
                 for (var i = 0, k; i < webStorage.length; i++) {
                     if (k = webStorage.key(i)) {
