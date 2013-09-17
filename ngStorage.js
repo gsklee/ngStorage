@@ -40,7 +40,8 @@
                 $browser,
                 $window
             ){
-                var webStorage = $window[storageType],
+                var webStorage = $window[storageType] || (console.warn('This browser does not support Web Storage!'), {}),
+
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
@@ -57,6 +58,7 @@
                             return $storage.$default(items);
                         }
                     },
+
                     _last$storage;
 
                 // (#8) `i < webStorage.length` is needed for IE9
