@@ -1,0 +1,22 @@
+{
+  "name": "ngStorage",
+  "version": "0.2.3",
+  "description": "An AngularJS module that makes Web Storage working in the Angular Way. Contains two services: $localStorage and $sessionStorage.",
+  "main": "ngStorage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gsklee/ngStorage.git"
+  },
+  "author": "gsklee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gsklee/ngStorage/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.4"
+  }
+}
