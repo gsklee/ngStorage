@@ -40,6 +40,7 @@
                 $browser,
                 $window
             ){
+                // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
                 var webStorage = $window[storageType] || (console.warn('This browser does not support Web Storage!'), {}),
 
                     $storage = {
@@ -61,11 +62,10 @@
 
                     _last$storage;
 
-                // (#8) `i < webStorage.length` is needed for IE9
+                // #8: `i < webStorage.length` is needed for IE9
                 for (var i = 0, k; i < webStorage.length; i++) {
-                    if (k = webStorage.key(i)) {
-                      'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
-                    }
+                    // #10: `k` may be an empty string
+                    (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
                 }
 
                 _last$storage = angular.copy($storage);
@@ -94,7 +94,7 @@
                     }
                 });
 
-                // (#6) Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
+                // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 'localStorage' === storageType && $window.addEventListener('storage', function(event) {
                     if ('ngStorage-' === event.key.slice(0, 10)) {
                         event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
