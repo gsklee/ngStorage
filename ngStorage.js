@@ -73,13 +73,7 @@
                 $browser.addPollFn(function() {
                     if (!angular.equals($storage, _last$storage)) {
                         angular.forEach($storage, function(v, k) {
-                            if (angular.isDefined(v) && '$' !== k[0]) {
-
-                                // Remove $$hashKey and other things that cannot be stringified
-                                $storage[k] = angular.fromJson(angular.toJson(v));
-
-                                webStorage.setItem('ngStorage-' + k, angular.toJson(v));
-                            }
+                            angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
 
                             delete _last$storage[k];
                         });
