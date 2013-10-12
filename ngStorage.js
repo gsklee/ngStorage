@@ -82,8 +82,6 @@
                         }
 
                         _last$storage = angular.copy($storage);
-
-                        $rootScope.$apply();
                     }
                 });
 
