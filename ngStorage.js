@@ -13,7 +13,6 @@
      * @ngdoc object
      * @name ngStorage.$localStorage
      * @requires $rootScope
-     * @requires $browser
      * @requires $window
      */
 
@@ -23,7 +22,6 @@
      * @ngdoc object
      * @name ngStorage.$sessionStorage
      * @requires $rootScope
-     * @requires $browser
      * @requires $window
      */
 
@@ -32,12 +30,10 @@
     function _storageFactory(storageType) {
         return [
             '$rootScope',
-            '$browser',
             '$window',
 
             function(
                 $rootScope,
-                $browser,
                 $window
             ){
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
@@ -60,7 +56,9 @@
                         }
                     },
 
-                    _last$storage;
+                    _last$storage,
+                    
+                    _debounce;
 
                 for (var i = 0, k; i < webStorage.length; i++) {
                     // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
@@ -69,20 +67,24 @@
 
                 _last$storage = angular.copy($storage);
 
-                $browser.addPollFn(function() {
-                    if (!angular.equals($storage, _last$storage)) {
-                        angular.forEach($storage, function(v, k) {
-                            angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
+                $rootScope.$watch(function() {
+                    _debounce || (_debounce = setTimeout(function() {
+                        _debounce = null;
 
-                            delete _last$storage[k];
-                        });
+                        if (!angular.equals($storage, _last$storage)) {
+                            angular.forEach($storage, function(v, k) {
+                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
 
-                        for (var k in _last$storage) {
-                            webStorage.removeItem('ngStorage-' + k);
+                                delete _last$storage[k];
+                            });
+
+                            for (var k in _last$storage) {
+                                webStorage.removeItem('ngStorage-' + k);
+                            }
+
+                            _last$storage = angular.copy($storage);
                         }
-
-                        _last$storage = angular.copy($storage);
-                    }
+                    }, 100));
                 });
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
