@@ -116,6 +116,9 @@ You can store anything except those [not supported by JSON](http://www.json.org/
 * `Infinity`, `NaN` - Will be replaced with `null`.
 * `undefined`, Function - Will be removed.
 
+### Minification
+Just run `$ npm install` to install dependencies.  Then run `$ grunt` for minification.
+
 Todos
 =====
 
