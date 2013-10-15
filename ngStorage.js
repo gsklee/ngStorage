@@ -38,7 +38,6 @@
             ){
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
                 var webStorage = $window[storageType] || (console.warn('This browser does not support Web Storage!'), {}),
-
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
@@ -55,9 +54,7 @@
                             return $storage.$default(items);
                         }
                     },
-
                     _last$storage,
-                    
                     _debounce;
 
                 for (var i = 0, k; i < webStorage.length; i++) {
@@ -88,7 +85,7 @@
                 });
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
-                'localStorage' === storageType && $window.addEventListener('storage', function(event) {
+                'localStorage' === storageType && $window.addEventListener && $window.addEventListener('storage', function(event) {
                     if ('ngStorage-' === event.key.slice(0, 10)) {
                         event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
 
