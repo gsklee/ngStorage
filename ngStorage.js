@@ -31,13 +31,15 @@
         return [
             '$rootScope',
             '$window',
+            '$log',
 
             function(
                 $rootScope,
-                $window
+                $window,
+                $log
             ){
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
-                var webStorage = $window[storageType] || (console.warn('This browser does not support Web Storage!'), {}),
+                var webStorage = $window[storageType] || ($log.warn('This browser does not support Web Storage!'), {}),
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
