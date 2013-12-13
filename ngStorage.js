@@ -38,10 +38,12 @@
             $get: [
                 '$rootScope',
                 '$window',
+                '$timeout',
                 '$log',
                 function(
                     $rootScope,
                     $window,
+                    $timeout,
                     $log
                 ){
                     // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
@@ -74,7 +76,7 @@
                     _last$storage = angular.copy($storage);
 
                     $rootScope.$watch(function() {
-                        _debounce || (_debounce = setTimeout(function() {
+                        _debounce || (_debounce = $timeout(function() {
                             _debounce = null;
 
                             if (!angular.equals($storage, _last$storage)) {
