@@ -28,11 +28,11 @@ Usage
 ```javascript
 angular.module('app', [
     'ngStorage'
-]).controller('Ctrl', function(
-    $scope,
-    $localStorage,
-    $sessionStorage
-){});
+])
+
+    .controller('Ctrl', ['$scope', '$localStorage', '$sessionStorage', function($scope, $localStorage, $sessionStorage){
+        // Ctrl code here
+    }]);
 ```
 
 ### Read and Write | [Demo](http://plnkr.co/edit/3vfRkvG7R9DgQxtWbGHz?p=preview)
