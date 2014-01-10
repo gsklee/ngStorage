@@ -34,8 +34,8 @@ module.exports = function(grunt) {
             },
 
             build: {
-                src: '<%= pkg.name %>.js',
-                dest: '<%= pkg.name %>.min.js'
+                src: 'ngStorage.js',
+                dest: 'ngStorage.min.js'
             }
         }
     });
