@@ -85,7 +85,7 @@
 
                             _last$storage = angular.copy($storage);
                         }
-                    }, 100));
+                    }, 100, false));
                 });
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
