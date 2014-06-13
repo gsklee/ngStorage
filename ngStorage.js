@@ -32,11 +32,13 @@
             '$rootScope',
             '$window',
             '$log',
+            '$timeout',
 
             function(
                 $rootScope,
                 $window,
-                $log
+                $log,
+                $timeout
             ){
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
                 var webStorage = $window[storageType] || ($log.warn('This browser does not support Web Storage!'), {}),
@@ -67,7 +69,7 @@
                 _last$storage = angular.copy($storage);
 
                 $rootScope.$watch(function() {
-                    _debounce || (_debounce = setTimeout(function() {
+                    _debounce || (_debounce = $timeout(function() {
                         _debounce = null;
 
                         if (!angular.equals($storage, _last$storage)) {
@@ -83,7 +85,7 @@
 
                             _last$storage = angular.copy($storage);
                         }
-                    }, 100));
+                    }, 100, false));
                 });
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
