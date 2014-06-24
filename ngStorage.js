@@ -60,8 +60,18 @@
                     _debounce;
 
                 for (var i = 0, k; i < webStorage.length; i++) {
-                    // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty) || bug fix, if value from getItem is string, no need to parse JSON.
-                    (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = (typeof webStorage.getItem(k) === 'object' ? angular.fromJson(webStorage.getItem(k)) : webStorage.getItem(k)));
+                    // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty) || bug fix, if value from getItem is primitive (string, number, etc), no need to parse JSON.
+                    try {
+                        (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                    } catch (e) {
+                        if (e instanceof SyntaxError) {
+                            // parsing error from angular.fromJson; try as primitive value
+                            (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = webStorage.getItem(k));
+                        } else {
+                            // unrecoverable error; rethrow
+                            throw e;
+                        }
+                    }
                 }
 
                 _last$storage = angular.copy($storage);

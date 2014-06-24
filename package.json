@@ -14,9 +14,9 @@
   },
   "devDependencies": {
     "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.11",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-karma": "~0.7.1",
-    "karma-mocha": "~0.1.0",
-    "grunt-cli": "~0.1.11"
+    "karma-mocha": "~0.1.0"
   }
 }
