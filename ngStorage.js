@@ -60,8 +60,8 @@
                     _debounce;
 
                 for (var i = 0, k; i < webStorage.length; i++) {
-                    // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
-                    (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                    // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty) || bug fix, if value from getItem is string, no need to parse JSON.
+                    (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = (typeof webStorage.getItem(k) === 'object' ? angular.fromJson(webStorage.getItem(k)) : webStorage.getItem(k)));
                 }
 
                 _last$storage = angular.copy($storage);
