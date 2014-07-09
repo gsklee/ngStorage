@@ -82,7 +82,13 @@
 
                         if (!angular.equals($storage, _last$storage)) {
                             angular.forEach($storage, function(v, k) {
-                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
+                                if (typeof v === 'object') {
+                                    // this handles objects and arrays
+                                    angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
+                                } else {
+                                    // primitive or special data types
+                                    angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, v.toString());
+                                }
 
                                 delete _last$storage[k];
                             });
@@ -113,3 +119,4 @@
     }
 
 })();
+
