@@ -87,7 +87,7 @@
                                     angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
                                 } else {
                                     // primitive or special data types
-                                    angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, v.toString());
+                                    angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, v);
                                 }
 
                                 delete _last$storage[k];
