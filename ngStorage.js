@@ -55,7 +55,7 @@
 
                             return $storage.$default(items);
                         },
-                        $scan: function () {
+                        $sync: function () {
                             for (var i = 0, k; i < webStorage.length; i++) {
                                 // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
                                 (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
@@ -65,7 +65,7 @@
                     _last$storage,
                     _debounce;
 
-                $storage.$scan();
+                $storage.$sync();
 
                 _last$storage = angular.copy($storage);
 
