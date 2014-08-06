@@ -38,9 +38,8 @@
                 $window,
                 $log
             ){
-                // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
-                var webStorage = $window[storageType] || ($log.warn('This browser does not support Web Storage!'), {}),
-                    $storage = {
+                var webStorage,
+                  $storage = {
                         $default: function(items) {
                             for (var k in items) {
                                 angular.isDefined($storage[k]) || ($storage[k] = items[k]);
@@ -58,6 +57,36 @@
                     },
                     _last$storage,
                     _debounce;
+
+                // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
+                try {
+                    webStorage = $window[storageType];
+                    // Checking webStorage.length is necessary here because Firefox allows webStorage = $window[storageType];
+                    // for sessionStorage, even if the user has blocked all cookies/storage. However, security error then shows up when
+                    // webStorage.length is called
+                    webStorage.length;
+                } catch (e) {
+                    $log.warn('This browser does not support Web Storage!');
+
+                    var data = {},
+                        undef;
+                    webStorage = {
+                        setItem: function(id, val) {
+                            return data[id] = String(val);
+                        },
+                        getItem: function(id) {
+                            return data.hasOwnProperty(id) ? data[id] : undef;
+                        },
+                        removeItem: function(id) {
+                            return delete data[id];
+                        },
+                        clear: function() {
+                            return data = {};
+                        },
+                        // This is only a shim and not meant to be updated. It avoids webStorage.length == undefined in the loop below.
+                        length: 0
+                    };
+                }
 
                 for (var i = 0, k; i < webStorage.length; i++) {
                     // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
