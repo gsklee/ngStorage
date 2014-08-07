@@ -119,6 +119,33 @@ You can store anything except those [not supported by JSON](http://www.json.org/
 ### Minification
 Just run `$ npm install` to install dependencies.  Then run `$ grunt` for minification.
 
+### Hints
+
+#### Watch the watch
+
+ngStorage internally uses an Angular watch to monitor changes to the `$storage`/`$localStorage` objects. That means that a digest cycle is required to persist your new values into the browser local storage. 
+Normally this is not a problem, but, for example, if you launch a new window after saving a value...
+
+```javascript
+$scope.$storage.school = theSchool;
+$log.debug("launching " + url);
+var myWindow = $window.open("", "_self");
+myWindow.document.write(response.data);
+```
+
+the new values will not reliably be saved into the browser local storage. Allow a digest cycle to occur by using a zero-value `$timeout` as:
+
+```javascript
+$scope.$storage.school = theSchool;
+$log.debug("launching and saving the new value" + url);
+$timeout(function(){
+   var myWindow = $window.open("", "_self");
+   myWindow.document.write(response.data);
+});
+```
+
+And your new values will be persisted correctly.
+
 Todos
 =====
 
