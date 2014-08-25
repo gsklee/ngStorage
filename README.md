@@ -23,6 +23,21 @@ bower install ngstorage
 Usage
 =====
 
+### Include ngStorage
+#### via script tags in HTML
+```html
+<script src="{PATH_TO_LIBRARY}/angular.js"></script>
+<!-- include after angular.js -->
+<script src="{PATH_TO_LIBRARY}/ngStorage{.min}.js"></script>
+```
+
+#### via browserify or CommonJS-like module system
+```javascript
+var ngStorage = require('ngStorage');
+angular.module('yourAppModule', [ngStorage]);
+```
+
+
 ### Require ngStorage and Inject the Services
 
 ```javascript

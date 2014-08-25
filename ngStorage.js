@@ -1,6 +1,13 @@
 'use strict';
 
-(function() {
+/**
+ * CommonJS and CommonJS-like package manager support
+ */
+if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports) {
+  module.exports = 'ngStorage';
+}
+
+(function(window, angular) {
 
     /**
      * @ngdoc overview
@@ -102,4 +109,4 @@
         ];
     }
 
-})();
+})(window, window.angular);
