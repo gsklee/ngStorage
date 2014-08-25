@@ -28,7 +28,7 @@ Usage
 ```html
 <script src="{PATH_TO_LIBRARY}/angular.js"></script>
 <!-- include after angular.js -->
-<script src="{PATH_TO_LIBRARY}/ngStoragei{.min}.js"></script>
+<script src="{PATH_TO_LIBRARY}/ngStorage{.min}.js"></script>
 ```
 
 #### via browserify or CommonJS-like module system
