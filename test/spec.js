@@ -17,14 +17,19 @@ describe('ngStorage', function () {
         expect($sessionStorage).not.to.equal(null);
     }));
 
-    describe('$localStorage', function() {
+    describeStorageBehaviorFor('localStorage');
+    describeStorageBehaviorFor('sessionStorage');
 
-        var $window, $rootScope, $localStorage;
+    function describeStorageBehaviorFor(storageType) {
 
-        function initStorage(initialValues) {
+        describe('$' + storageType, function() {
 
-            $window = {
-                localStorage: {
+            var $window, $rootScope, $storage;
+
+            function initStorage(initialValues) {
+
+                $window = {}
+                $window[storageType] = {
                     length: Object.keys(initialValues).length,
                     data: initialValues,
                     getItem: function(key) { return this.data[key]; },
@@ -37,70 +42,70 @@ describe('ngStorage', function () {
                         this.length = Object.keys(this.data).length
                     },
                     key: function(i) { return Object.keys(this.data)[i]; }
+                };
 
-                }
-            };
+                module(function($provide) {
+                    $provide.value('$window', $window);
+                });
 
-            module(function($provide) {
-                $provide.value('$window', $window);
+                inject(['$rootScope', '$' + storageType,
+                    function(_$rootScope_, _$storage_) {
+                        $rootScope = _$rootScope_;
+                        $storage = _$storage_;
+                    }
+                ]);
+
+            }
+
+            it('should contain a value for each ngStorage- key in window.' + storageType, function() {
+                initStorage({
+                    nonNgStorage: 'this should be ingored',
+                    'ngStorage-string': '"a string"',
+                    'ngStorage-number': '123',
+                    'ngStorage-bool': 'true',
+                    'ngStorage-object': '{"string":"a string", "number": 123, "bool": true}'
+                });
+                delete $storage.$default
+                delete $storage.$reset
+                expect($storage).to.deep.equal({
+                    string: 'a string',
+                    number: 123,
+                    bool: true,
+                    object: {string:'a string', number: 123, bool: true}
+                });
+            })
+
+            it('should add a key to window.' + storageType + ' when a key is added to $storage', function(done) {
+                initStorage({});
+                $storage.newKey = 'some value';
+                $rootScope.$digest();
+                setTimeout(function() {
+                    expect($window[storageType].data).to.deep.equal({'ngStorage-newKey': '"some value"'});
+                    done();
+                }, 125);
             });
 
-            inject(function(_$rootScope_, _$localStorage_) {
-                $rootScope = _$rootScope_;
-                $localStorage = _$localStorage_;
+            it('should update the key in window.' + storageType + ' when the associated key in $' + storageType + ' is updated', function(done) {
+                initStorage({'ngStorage-existing': '"update me"'});
+                $storage.existing = 'updated';
+                $rootScope.$digest();
+                setTimeout(function() {
+                    expect($window[storageType].data).to.deep.equal({'ngStorage-existing': '"updated"'});
+                    done();
+                }, 125);
             });
 
-        }
-
-        it('should contain a value for each ngStorage- key in window.localStorage', function() {
-            initStorage({
-                nonNgStorage: 'this should be ingored',
-                'ngStorage-string': '"a string"',
-                'ngStorage-number': '123',
-                'ngStorage-bool': 'true',
-                'ngStorage-object': '{"string":"a string", "number": 123, "bool": true}'
+            it('should delete the key from window.' + storageType + ' when the associated key in $' + storageType + ' is deleted', function(done) {
+                initStorage({'ngStorage-existing': '"delete me"'});
+                delete $storage.existing;
+                $rootScope.$digest();
+                setTimeout(function() {
+                    expect($window[storageType].data).to.deep.equal({});
+                    done();
+                }, 125);
             });
-            delete $localStorage.$default
-            delete $localStorage.$reset
-            expect($localStorage).to.deep.equal({
-                string: 'a string',
-                number: 123,
-                bool: true,
-                object: {string:'a string', number: 123, bool: true}
-            });
-        })
-
-        it('should add a key to window.localStorage when a key is added to $localStorage', function(done) {
-            initStorage({});
-            $localStorage.newKey = 'some value';
-            $rootScope.$digest();
-            setTimeout(function() {
-                expect($window.localStorage.data).to.deep.equal({'ngStorage-newKey': '"some value"'});
-                done();
-            }, 125);
         });
-
-        it('should update the key in window.localStorage when the associated key in $localStorage is updated', function(done) {
-            initStorage({'ngStorage-existing': '"update me"'});
-            $localStorage.existing = 'updated';
-            $rootScope.$digest();
-            setTimeout(function() {
-                expect($window.localStorage.data).to.deep.equal({'ngStorage-existing': '"updated"'});
-                done();
-            }, 125);
-        });
-
-        it('should delete the key from window.localStorage when the associated key in $localStorage is deleted', function(done) {
-            initStorage({'ngStorage-existing': '"delete me"'});
-            delete $localStorage.existing;
-            $rootScope.$digest();
-            setTimeout(function() {
-                expect($window.localStorage.data).to.deep.equal({});
-                done();
-            }, 125);
-        });
-
-    });
+    }
 });
 
 
