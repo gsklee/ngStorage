@@ -28,7 +28,13 @@ describe('ngStorage', function() {
 
             function initStorage(initialValues) {
 
-                $window = {}
+                $window = {
+                    eventHandlers: {},
+                    addEventListener: function(event, handler) {
+                        this.eventHandlers[event] = handler;
+                    }
+                };
+
                 $window[storageType] = {
                     length: Object.keys(initialValues).length,
                     data: initialValues,
@@ -237,8 +243,65 @@ describe('ngStorage', function() {
 
                 });
             });
+
+            if (storageType == 'localStorage') {
+
+                describe('when an ngStorage- value in window.localStorage is updated', function() {
+
+                    beforeEach(function() {
+
+                        initStorage({'ngStorage-existing': '"update me"'});
+
+                        var updateEvent = {
+                            key: 'ngStorage-existing',
+                            newValue: '"updated"'
+                        };
+                        $window.eventHandlers.storage(updateEvent);
+                    });
+
+                    it('should reflect the update', function() {
+                        expect($storage.existing).to.equal('updated');
+                    });
+                });
+
+                describe('when an ngStorage- value in window.localStorage is added', function() {
+
+                    beforeEach(function() {
+
+                        initStorage({});
+
+                        var updateEvent = {
+                            key: 'ngStorage-value',
+                            newValue: '"new"'
+                        };
+                        $window.eventHandlers.storage(updateEvent);
+                    });
+
+                    it('should reflect the addition', function() {
+                        expect($storage.value).to.equal('new');
+                    });
+                });
+
+                describe('when an ngStorage- value in window.localStorage is deleted', function() {
+
+                    beforeEach(function() {
+
+                        initStorage({'ngStorage-existing': '"delete me"'});
+
+                        var updateEvent = {
+                            key: 'ngStorage-existing',
+                        };
+                        $window.eventHandlers.storage(updateEvent);
+                    });
+
+                    it('should reflect the deletion', function() {
+                        expect($storage.existing).to.be.undefined;
+                    });
+                });
+            }
         });
     }
+
 });
 
 
