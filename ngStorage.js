@@ -1,4 +1,14 @@
-(function() {
+(function(angular, factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        define('ngStore', ['angular'], function(angular) {
+            return factory(angular);
+        });
+    } else {
+        return factory(angular);
+    }
+}(typeof angular === 'undefined' ? null : angular, function(angular) {
+
     'use strict';
 
     /**
@@ -6,7 +16,7 @@
      * @name ngStorage
      */
 
-    angular.module('ngStorage', []).
+    angular.module('ngStorage', [])
 
     /**
      * @ngdoc object
@@ -15,7 +25,7 @@
      * @requires $window
      */
 
-    factory('$localStorage', _storageFactory('localStorage')).
+    .factory('$localStorage', _storageFactory('localStorage'))
 
     /**
      * @ngdoc object
@@ -24,7 +34,7 @@
      * @requires $window
      */
 
-    factory('$sessionStorage', _storageFactory('sessionStorage'));
+    .factory('$sessionStorage', _storageFactory('sessionStorage'));
 
     function _storageFactory(storageType) {
         return [
@@ -111,4 +121,4 @@
         ];
     }
 
-})();
+}));
