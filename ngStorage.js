@@ -31,7 +31,7 @@
             '$rootScope',
             '$window',
             '$log',
-            '$timeout'
+            '$timeout',
 
             function(
                 $rootScope,
