@@ -1,15 +1,12 @@
 {
   "name": "ng-storage",
+  "description": "localStorage and sessionStorage done right for AngularJS.",
+  "homepage": "https://github.com/gsklee/ngStorage",
   "version": "0.3.0",
   "author": "Gias Kay Lee",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/gsklee/ngStorage/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "scripts": {
-    "test": "./node_modules/.bin/grunt test"
+    "test": "grunt test"
   },
   "main": "ngStorage.js",
   "devDependencies": {
@@ -18,5 +15,37 @@
     "grunt-karma": "~0.7.1",
     "karma-mocha": "~0.1.0",
     "grunt-cli": "~0.1.11"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "grunt": "^0.4.2",
+    "grunt-karma": "^0.7.2",
+    "grunt-cli": "^0.1.11",
+    "karma": "^0.10.9",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-html2js-preprocessor": "^0.1.0",
+    "grunt-contrib-uglify": "^0.2.7",
+    "karma-chrome-launcher": "^0.1.2",
+    "karma-coffee-preprocessor": "^0.1.2",
+    "karma-mocha": "^0.1.1",
+    "karma-script-launcher": "^0.1.0",
+    "karma-phantomjs-launcher": "^0.1.1",
+    "requirejs": "^2.1.10",
+    "karma-jasmine": "^0.1.5",
+    "karma-requirejs": "^0.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gsklee/ngStorage"
+  },
+  "keywords": [
+    "localStorage",
+    "sessionStorage",
+    "angular"
+  ],
+  "bugs": {
+    "url": "https://github.com/gsklee/ngStorage/issues"
   }
 }
