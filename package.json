@@ -2,7 +2,7 @@
   "name": "ng-storage",
   "description": "localStorage and sessionStorage done right for AngularJS.",
   "homepage": "https://github.com/gsklee/ngStorage",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "Gias Kay Lee",
   "license": "MIT",
   "scripts": {
