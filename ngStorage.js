@@ -39,8 +39,9 @@
                 $log
             ){
                 function isStorageSupported(storageType) {
+                    var supported = null;
                     try {
-                        var supported = $window[storageType];
+                        supported = $window[storageType];
 
                         // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
                         // is available, but trying to call .setItem throws an exception below:
@@ -50,9 +51,8 @@
                             localStorage.setItem(key, key);
                             localStorage.removeItem(key);
                         }
-                        supported = true;
                     } catch (err) {
-                        supported = false;
+
                     }
                     return supported;
                 }
