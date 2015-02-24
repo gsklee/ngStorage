@@ -38,8 +38,29 @@
                 $window,
                 $log
             ){
+                function isStorageSupported(storageType) {
+                    var supported = $window[storageType];
+
+                    // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
+                    // is available, but trying to call .setItem throws an exception below:
+                    // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage that exceeded the quota."
+                    if (supported && storageType === 'localStorage') {
+                        var key = '__' + Math.round(Math.random() * 1e7);
+
+                        try {
+                            localStorage.setItem(key, key);
+                            localStorage.removeItem(key);
+                        }
+                        catch (err) {
+                            supported = false;
+                        }
+                    }
+
+                    return supported;
+                }
+
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
-                var webStorage = $window[storageType] || ($log.warn('This browser does not support Web Storage!'), {}),
+                var webStorage = isStorageSupported(storageType) || ($log.warn('This browser does not support Web Storage!'), {setItem: function() {}, getItem: function() {}}),
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
