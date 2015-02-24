@@ -39,23 +39,21 @@
                 $log
             ){
                 function isStorageSupported(storageType) {
-                    var supported = $window[storageType];
+                    try {
+                        var supported = $window[storageType];
 
-                    // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
-                    // is available, but trying to call .setItem throws an exception below:
-                    // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage that exceeded the quota."
-                    if (supported && storageType === 'localStorage') {
-                        var key = '__' + Math.round(Math.random() * 1e7);
-
-                        try {
+                        // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
+                        // is available, but trying to call .setItem throws an exception below:
+                        // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage that exceeded the quota."
+                        if (supported && storageType === 'localStorage') {
+                            var key = '__' + Math.round(Math.random() * 1e7);
                             localStorage.setItem(key, key);
                             localStorage.removeItem(key);
                         }
-                        catch (err) {
-                            supported = false;
-                        }
+                        supported = true;
+                    } catch (err) {
+                        supported = false;
                     }
-
                     return supported;
                 }
 
