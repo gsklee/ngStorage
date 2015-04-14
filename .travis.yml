@@ -3,4 +3,4 @@ node_js:
     - "0.12"
 install:
     - npm install
-        - bower install
+    - bower install
