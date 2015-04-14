@@ -13,6 +13,7 @@
     "test": "./node_modules/.bin/grunt test"
   },
   "devDependencies": {
+    "bower": "1.x",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.11",
     "grunt-contrib-uglify": "~0.2.4",
