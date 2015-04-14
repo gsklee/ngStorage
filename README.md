@@ -1,6 +1,10 @@
 ngStorage
 =========
 
+[![Build Status](https://travis-ci.org/egilkh/ngStorage.svg)](https://travis-ci.org/egilkh/ngStorage)
+[![Dependency Status](https://david-dm.org/egilkh/ngStorage.svg)](https://david-dm.org/egilkh/ngStorage)
+[![devDependency Status](https://david-dm.org/egilkh/ngStorage/dev-status.svg)](https://david-dm.org/egilkh/ngStorage#info=devDependencies)
+
 An [AngularJS](https://github.com/angular/angular.js) module that makes Web Storage working in the *Angular Way*. Contains two services: `$localStorage` and `$sessionStorage`.
 
 ### Differences with Other Implementations
@@ -10,8 +14,8 @@ An [AngularJS](https://github.com/angular/angular.js) module that makes Web Stor
 * **sessionStorage** - We got this often-overlooked buddy covered.
 
 * **Cleanly-Authored Code** - Written in the *Angular Way*, well-structured with testability in mind.
- 
-* **No Cookie Fallback** - With Web Storage being [readily available](http://caniuse.com/namevalue-storage) in [all the browsers AngularJS officially supports](http://docs.angularjs.org/misc/faq#canidownloadthesourcebuildandhosttheangularjsenvironmentlocally), such fallback is largely redundant. 
+
+* **No Cookie Fallback** - With Web Storage being [readily available](http://caniuse.com/namevalue-storage) in [all the browsers AngularJS officially supports](http://docs.angularjs.org/misc/faq#canidownloadthesourcebuildandhosttheangularjsenvironmentlocally), such fallback is largely redundant.
 
 Install
 =======
