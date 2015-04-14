@@ -1,6 +1,16 @@
 'use strict';
 
 module.exports = function(grunt) {
+    var browsers = [
+        'Chrome',
+        'PhantomJS',
+        'Firefox'
+    ];
+
+    if (process.env.TRAVIS){
+        browsers = ['PhantomJS'];
+    }
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
