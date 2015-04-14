@@ -24,7 +24,7 @@ describe('ngStorage', function() {
 
         describe('$' + storageType, function() {
 
-            var $window, $rootScope, $storage;
+            var $window, $rootScope, $storage, $timeout;
 
             function initStorage(initialValues) {
 
@@ -54,10 +54,11 @@ describe('ngStorage', function() {
                     $provide.value('$window', $window);
                 });
 
-                inject(['$rootScope', '$' + storageType,
-                    function(_$rootScope_, _$storage_) {
+                inject(['$rootScope', '$' + storageType, '$timeout',
+                    function(_$rootScope_, _$storage_, _$timeout) {
                         $rootScope = _$rootScope_;
                         $storage = _$storage_;
+                        $timeout = _$timeout;
                     }
                 ]);
 
@@ -93,6 +94,8 @@ describe('ngStorage', function() {
                 $storage.newKey = 'some value';
                 $rootScope.$digest();
 
+                $timeout.flush();
+
                 setTimeout(function() {
                     expect($window[storageType].data)
                         .to.deep.equal({'ngStorage-newKey': '"some value"'});
@@ -108,6 +111,8 @@ describe('ngStorage', function() {
                 $storage.existing = 'updated';
                 $rootScope.$digest();
 
+                $timeout.flush();
+
                 setTimeout(function() {
                     expect($window[storageType].data)
                         .to.deep.equal({'ngStorage-existing': '"updated"'});
@@ -122,6 +127,8 @@ describe('ngStorage', function() {
                 initStorage({'ngStorage-existing': '"delete me"'});
                 delete $storage.existing;
                 $rootScope.$digest();
+
+                $timeout.flush();
 
                 setTimeout(function() {
                     expect($window[storageType].data).to.deep.equal({});
@@ -141,6 +148,9 @@ describe('ngStorage', function() {
 
                     $storage.$reset();
                     $rootScope.$digest();
+
+                    $timeout.flush();
+
                     setTimeout(done, 125);
                 });
 
@@ -156,6 +166,7 @@ describe('ngStorage', function() {
 
                     delete $storage.$default
                     delete $storage.$reset
+
                     expect($storage).to.deep.equal({});
 
                 });
@@ -173,6 +184,9 @@ describe('ngStorage', function() {
 
                     $storage.$reset({some: 'value'});
                     $rootScope.$digest();
+
+                    $timeout.flush();
+
                     setTimeout(done, 125);
                 });
 
@@ -211,6 +225,8 @@ describe('ngStorage', function() {
                     });
 
                     $rootScope.$digest();
+                    $timeout.flush();
+
                     setTimeout(done, 125);
                 });
 
