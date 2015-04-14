@@ -1,5 +1,7 @@
 'use strict';
 
+/* global describe, beforeEach, it, module, inject, expect, chai */
+
 describe('ngStorage', function() {
     var expect = chai.expect;
 
@@ -164,8 +166,8 @@ describe('ngStorage', function() {
 
                 it('should delete all keys from $' + storageType, function() {
 
-                    delete $storage.$default
-                    delete $storage.$reset
+                    delete $storage.$default;
+                    delete $storage.$reset;
 
                     expect($storage).to.deep.equal({});
 
@@ -202,8 +204,8 @@ describe('ngStorage', function() {
 
                 it('should reset $' + storageType + ' to match the object', function() {
 
-                    delete $storage.$default
-                    delete $storage.$reset
+                    delete $storage.$default;
+                    delete $storage.$reset;
                     expect($storage).to.deep.equal({some: 'value'});
 
                 });
