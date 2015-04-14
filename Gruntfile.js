@@ -28,11 +28,7 @@ module.exports = function(grunt) {
 
                 frameworks: ['mocha'],
 
-                browsers: [
-                    'Chrome',
-                    'PhantomJS',
-                    'Firefox'
-                ],
+                browsers: browsers,
 
                 singleRun: true
             }
