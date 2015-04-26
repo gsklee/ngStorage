@@ -21,7 +21,7 @@ Install
 =======
 
 ```bash
-bower install ngstorage
+bower install egilkh-ngStorage
 ```
 
 Usage
