@@ -11,11 +11,23 @@
         "session",
         "sessionstorage"
     ],
+    "ignore": [
+        "CHANGELOG.md",
+        "components",
+        "node_modules",
+        "test",
+        "package.json",
+        "Gruntfile.js"
+    ],
     "dependencies": {
         "angular": ">=1.0.8"
     },
     "devDependencies": {
         "angular-mocks": ">=1.0.8",
         "chai": "^2.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/egilkh/ngStorage.git"
     }
 }
