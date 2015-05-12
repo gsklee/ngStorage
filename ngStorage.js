@@ -68,11 +68,12 @@
 
                 $rootScope.$watch(function() {
                     _debounce || (_debounce = setTimeout(function() {
-                        _debounce = null;
-
                         if (!angular.equals($storage, _last$storage)) {
                             angular.forEach($storage, function(v, k) {
-                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
+                                angular.isDefined(v)
+                                    && '$' !== k[0]
+                                    && !angular.equals($storage[k], _last$storage[k])
+                                    && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
 
                                 delete _last$storage[k];
                             });
@@ -83,19 +84,26 @@
 
                             _last$storage = angular.copy($storage);
                         }
+                        _debounce = null;
                     }, 100));
                 });
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
-                'localStorage' === storageType && $window.addEventListener && $window.addEventListener('storage', function(event) {
-                    if ('ngStorage-' === event.key.slice(0, 10)) {
-                        event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
+                'localStorage' === storageType && $window.addEventListener && $window.addEventListener('storage', function (event) {
+                    if (!angular.equals(event.newValue, event.oldValue)) {
+                        var pr = event.key.slice(0, 10), key = event.key.slice(10);
+                        if ('ngStorage-' === pr) {
+                            if (event.newValue) {
+                                $storage[key] = angular.fromJson(event.newValue);
+                                _last$storage[key] = angular.copy($storage[key]);
+                            } else {
+                                delete $storage[key];
+                            }
 
-                        _last$storage = angular.copy($storage);
-
-                        $rootScope.$apply();
+                            $rootScope.$apply();
+                        }
                     }
-                });
+                }, false);
 
                 return $storage;
             }
