@@ -37,6 +37,17 @@ angular.module('app', [
 ){});
 ```
 
+### Configure prefix for keys in storage
+
+```javascript
+angular.module('app', [
+    'ngStorage'
+]).config(['$localStorageProvider', '$sessionStorageProvider', function ($localStorageProvider, $sessionStorageProvider) {
+    localStorageProvider.setPrefix('myCustomPrefix-');
+    sessionStorageProvider.setPrefix('myOtherCustomPrefix-');
+}])
+```
+
 ### Read and Write | [Demo](http://plnkr.co/edit/3vfRkvG7R9DgQxtWbGHz?p=preview)
 
 Pass `$localStorage` (or `$sessionStorage`) by reference to a hook under `$scope` in plain ol' JavaScript:
