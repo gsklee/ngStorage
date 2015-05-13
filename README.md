@@ -1,9 +1,12 @@
 ngStorage
 =========
 
-[![Build Status](https://travis-ci.org/egilkh/ngStorage.svg)](https://travis-ci.org/egilkh/ngStorage)
-[![Dependency Status](https://david-dm.org/egilkh/ngStorage.svg)](https://david-dm.org/egilkh/ngStorage)
-[![devDependency Status](https://david-dm.org/egilkh/ngStorage/dev-status.svg)](https://david-dm.org/egilkh/ngStorage#info=devDependencies)
+<!--
+[![Build Status](https://travis-ci.org/gsklee/ngStorage.svg)](https://travis-ci.org/gsklee/ngStorage)
+-->
+
+[![Dependency Status](https://david-dm.org/gsklee/ngStorage.svg)](https://david-dm.org/gsklee/ngStorage)
+[![devDependency Status](https://david-dm.org/gsklee/ngStorage/dev-status.svg)](https://david-dm.org/gsklee/ngStorage#info=devDependencies)
 
 An [AngularJS](https://github.com/angular/angular.js) module that makes Web Storage working in the *Angular Way*. Contains two services: `$localStorage` and `$sessionStorage`.
 
