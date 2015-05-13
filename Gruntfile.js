@@ -1,6 +1,16 @@
 'use strict';
 
 module.exports = function(grunt) {
+    var browsers = [
+        'Chrome',
+        'PhantomJS',
+        'Firefox'
+    ];
+
+    if (process.env.TRAVIS){
+        browsers = ['PhantomJS'];
+    }
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -18,11 +28,7 @@ module.exports = function(grunt) {
 
                 frameworks: ['mocha'],
 
-                browsers: [
-                    'Chrome',
-                    'PhantomJS',
-                    'Firefox'
-                ],
+                browsers: browsers,
 
                 singleRun: true
             }
@@ -34,8 +40,8 @@ module.exports = function(grunt) {
             },
 
             build: {
-                src: '<%= pkg.name %>.js',
-                dest: '<%= pkg.name %>.min.js'
+                src: 'ngStorage.js',
+                dest: 'ngStorage.min.js'
             }
         }
     });
