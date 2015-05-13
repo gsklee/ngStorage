@@ -1,5 +1,5 @@
 {
-    "name": "egilkh-ngStorage",
+    "name": "ngstorage",
     "version": "0.3.3",
     "main": "./ngStorage.js",
     "keywords": [
@@ -31,6 +31,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/egilkh/ngStorage.git"
+        "url": "git://github.com/gsklee/ngStorage.git"
     }
 }
