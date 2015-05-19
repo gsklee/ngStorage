@@ -1,7 +1,7 @@
 (function(angular, factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
-        define('ngStorage', ['angular'], function(angular) {
+        define(['angular'], function(angular) {
             return factory(angular);
         });
     } else {
