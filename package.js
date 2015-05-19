@@ -1,6 +1,6 @@
 Package.describe({
   name: 'gsklee:ngstorage',
-  version: '0.3.0',
+  version: '0.3.4',
   summary: 'ngStorage package for Meteor',
   git: 'https://github.com/gsklee/ngStorage',
   documentation: 'README.md'
