@@ -8,6 +8,7 @@
       "url": "https://github.com/gsklee/ngStorage/blob/master/LICENSE"
     }
   ],
+  "main": "ngStorage.js",
   "scripts": {
     "test": "./node_modules/.bin/grunt test"
   },
