@@ -1,5 +1,3 @@
-###[** Looking for Maintainers! **](https://github.com/gsklee/ngStorage/issues/84)
-
 ngStorage
 =========
 
