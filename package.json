@@ -8,6 +8,10 @@
       "url": "https://github.com/gsklee/ngStorage/blob/master/LICENSE"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gsklee/ngStorage"
+  },
   "main": "ngStorage.js",
   "scripts": {
     "test": "./node_modules/.bin/grunt test"
