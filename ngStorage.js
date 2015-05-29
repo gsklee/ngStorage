@@ -19,7 +19,7 @@
      * @name ngStorage
      */
 
-    exports.ngStorage = angular.module('ngStorage', [])
+    exports = angular.module('ngStorage', [])
 
     /**
      * @ngdoc object
