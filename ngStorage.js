@@ -16,7 +16,7 @@
      * @name ngStorage
      */
 
-    angular.module('ngStorage', [])
+    return angular.module('ngStorage', [])
 
     /**
      * @ngdoc object
