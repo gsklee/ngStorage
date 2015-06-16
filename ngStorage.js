@@ -82,7 +82,7 @@
                         },
                         $reset: function(items) {
                             for (var k in $storage) {
-                                '$' === k[0] || delete $storage[k];
+                                '$' === k[0] || (delete $storage[k] && webStorage.removeItem('ngStorage-' + k));
                             }
 
                             return $storage.$default(items);
