@@ -23,9 +23,20 @@ An [AngularJS](https://github.com/angular/angular.js) module that makes Web Stor
 Install
 =======
 
+### Bower
+
 ```bash
 bower install ngstorage
 ```
+
+*NOTE:* We are `ngstorage` and *NOT* `ngStorage`. The casing is important!
+
+### NPM
+```bash
+npm install ngstorage
+```
+
+*NOTE:* We are `ngstorage` and *NOT* `ngStorage`. The casing is important!
 
 CDN
 ===
