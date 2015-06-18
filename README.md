@@ -27,6 +27,17 @@ Install
 bower install ngstorage
 ```
 
+CDN
+===
+
+cdnjs now hosts ngStorage at <https://cdnjs.com/libraries/ngStorage>
+
+To use it
+
+``` html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.5/ngStorage.min.js"></script>
+```
+
 Usage
 =====
 
