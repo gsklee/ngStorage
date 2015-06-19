@@ -50,7 +50,16 @@
                 $timeout
             ){
                 function isStorageSupported(storageType) {
-                    var supported = $window[storageType];
+
+                    // fix 'SecurityError: DOM Exception 18' exception in Desktop Safari, Mobile Safari
+                    // when "Block cookies": "Always block" is turned on
+                    var supported;
+                    try {
+                        supported = $window[storageType];
+                    }
+                    catch (err) {
+                        supported = false;
+                    }
 
                     // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
                     // is available, but trying to call .setItem throws an exception below:
