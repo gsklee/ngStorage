@@ -1,13 +1,16 @@
-(function(angular, factory) {
+(function (root, factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
-        define('ngStorage', ['angular'], function(angular) {
-            return factory(angular);
-        });
+        // AMD. Register as an anonymous module.
+        define(['exports', 'angular'], factory);
+    } else if (typeof exports === 'object') {
+        // CommonJS
+        factory(exports, require('angular'));
     } else {
-        return factory(angular);
+        // Browser globals
+        factory(root.ngStorage = {}, root.angular);
     }
-}(typeof angular === 'undefined' ? null : angular, function(angular) {
+}(this, function (exports, angular) {
 
     'use strict';
 
@@ -16,7 +19,7 @@
      * @name ngStorage
      */
 
-    angular.module('ngStorage', [])
+    exports = angular.module('ngStorage', [])
 
     /**
      * @ngdoc object
