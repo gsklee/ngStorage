@@ -1,14 +1,15 @@
-(function(angular, factory) {
-    'use strict';
-    if (typeof define === 'function' && define.amd) {
-        define('ngStorage', ['angular'], function(angular) {
-            return factory(angular);
-        });
-    } else {
-        return factory(angular);
-    }
-}(typeof angular === 'undefined' ? null : angular, function(angular) {
+(function (root, factory) {
+  'use strict';
 
+  if (typeof define === 'function' && define.amd) {
+    define(['angular'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'));
+  } else {
+    // Browser globals (root is window), we don't register it.
+    factory(root.angular);
+  }
+}(this , function (angular) {
     'use strict';
 
     /**
@@ -16,7 +17,7 @@
      * @name ngStorage
      */
 
-    angular.module('ngStorage', [])
+    return angular.module('ngStorage', [])
 
     /**
      * @ngdoc object
