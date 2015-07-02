@@ -1,10 +1,7 @@
 ngStorage
 =========
 
-<!--
 [![Build Status](https://travis-ci.org/gsklee/ngStorage.svg)](https://travis-ci.org/gsklee/ngStorage)
--->
-
 [![Dependency Status](https://david-dm.org/gsklee/ngStorage.svg)](https://david-dm.org/gsklee/ngStorage)
 [![devDependency Status](https://david-dm.org/gsklee/ngStorage/dev-status.svg)](https://david-dm.org/gsklee/ngStorage#info=devDependencies)
 
