@@ -79,6 +79,7 @@ describe('ngStorage', function() {
 
                 delete $storage.$default;
                 delete $storage.$reset;
+                delete $storage.$sync;
 
                 expect($storage).to.deep.equal({
                     string: 'a string',
@@ -168,6 +169,7 @@ describe('ngStorage', function() {
 
                     delete $storage.$default;
                     delete $storage.$reset;
+                    delete $storage.$sync;
 
                     expect($storage).to.deep.equal({});
 
@@ -206,6 +208,8 @@ describe('ngStorage', function() {
 
                     delete $storage.$default;
                     delete $storage.$reset;
+                    delete $storage.$sync;
+
                     expect($storage).to.deep.equal({some: 'value'});
 
                 });

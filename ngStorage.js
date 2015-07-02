@@ -92,6 +92,7 @@
                                 angular.isDefined($storage[k]) || ($storage[k] = items[k]);
                             }
 
+                            $storage.$sync();
                             return $storage;
                         },
                         $reset: function(items) {
@@ -100,23 +101,18 @@
                             }
 
                             return $storage.$default(items);
+                        },
+                        $sync: function () {
+                            for (var i = 0, l = webStorage.length, k; i < l; i++) {
+                                // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
+                                (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                            }
                         }
                     },
                     _last$storage,
                     _debounce;
 
-                try {
-                    webStorage = $window[storageType];
-                    webStorage.length;
-                } catch(e) {
-                    $log.warn('This browser does not support Web Storage!');
-                    webStorage = {};
-                }
-
-                for (var i = 0, l = webStorage.length, k; i < l; i++) {
-                    // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
-                    (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
-                }
+                $storage.$sync();
 
                 _last$storage = angular.copy($storage);
 
