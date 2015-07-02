@@ -262,61 +262,60 @@ describe('ngStorage', function() {
                 });
             });
 
-            if (storageType == 'localStorage') {
 
-                describe('when an ngStorage- value in window.localStorage is updated', function() {
+            describe('when an ngStorage- value in window.localStorage is updated', function() {
 
-                    beforeEach(function() {
+                beforeEach(function() {
 
-                        initStorage({'ngStorage-existing': '"update me"'});
+                    initStorage({'ngStorage-existing': '"update me"'});
 
-                        var updateEvent = {
-                            key: 'ngStorage-existing',
-                            newValue: '"updated"'
-                        };
-                        $window.eventHandlers.storage(updateEvent);
-                    });
-
-                    it('should reflect the update', function() {
-                        expect($storage.existing).to.equal('updated');
-                    });
+                    var updateEvent = {
+                        key: 'ngStorage-existing',
+                        newValue: '"updated"'
+                    };
+                    $window.eventHandlers.storage(updateEvent);
                 });
 
-                describe('when an ngStorage- value in window.localStorage is added', function() {
+                it('should reflect the update', function() {
+                    expect($storage.existing).to.equal('updated');
+                });
+            });
 
-                    beforeEach(function() {
+            describe('when an ngStorage- value in window.localStorage is added', function() {
 
-                        initStorage({});
+                beforeEach(function() {
 
-                        var updateEvent = {
-                            key: 'ngStorage-value',
-                            newValue: '"new"'
-                        };
-                        $window.eventHandlers.storage(updateEvent);
-                    });
+                    initStorage({});
 
-                    it('should reflect the addition', function() {
-                        expect($storage.value).to.equal('new');
-                    });
+                    var updateEvent = {
+                        key: 'ngStorage-value',
+                        newValue: '"new"'
+                    };
+                    $window.eventHandlers.storage(updateEvent);
                 });
 
-                describe('when an ngStorage- value in window.localStorage is deleted', function() {
-
-                    beforeEach(function() {
-
-                        initStorage({'ngStorage-existing': '"delete me"'});
-
-                        var updateEvent = {
-                            key: 'ngStorage-existing',
-                        };
-                        $window.eventHandlers.storage(updateEvent);
-                    });
-
-                    it('should reflect the deletion', function() {
-                        expect($storage.existing).to.be.undefined;
-                    });
+                it('should reflect the addition', function() {
+                    expect($storage.value).to.equal('new');
                 });
-            }
+            });
+
+            describe('when an ngStorage- value in window.localStorage is deleted', function() {
+
+                beforeEach(function() {
+
+                    initStorage({'ngStorage-existing': '"delete me"'});
+
+                    var updateEvent = {
+                        key: 'ngStorage-existing',
+                    };
+                    $window.eventHandlers.storage(updateEvent);
+                });
+
+                it('should reflect the deletion', function() {
+                    expect($storage.existing).to.be.undefined;
+                });
+            });
+
         });
     }
 
