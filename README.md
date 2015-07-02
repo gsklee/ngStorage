@@ -41,12 +41,23 @@ npm install ngstorage
 CDN
 ===
 
+### cdnjs
 cdnjs now hosts ngStorage at <https://cdnjs.com/libraries/ngStorage>
 
 To use it
 
 ``` html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.5/ngStorage.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+```
+
+### jsDelivr
+
+jsDelivr hosts ngStorage at <http://www.jsdelivr.com/#!ngstorage>
+
+To use is
+
+``` html
+<script src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
 ```
 
 Usage
