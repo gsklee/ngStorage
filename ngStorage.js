@@ -107,6 +107,27 @@
                                 // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
                                 (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
                             }
+                        },
+                        $apply: function () {
+                            var temp$storage;
+
+                            _debounce = null;
+
+                            if (!angular.equals($storage, _last$storage)) {
+                                temp$storage = angular.copy(_last$storage);
+
+                                angular.forEach($storage, function(v, k) {
+                                    angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
+
+                                    delete temp$storage[k];
+                                });
+
+                                for (var k in temp$storage) {
+                                    webStorage.removeItem('ngStorage-' + k);
+                                }
+
+                                _last$storage = angular.copy($storage);
+                            }
                         }
                     },
                     _last$storage,
@@ -117,25 +138,7 @@
                 _last$storage = angular.copy($storage);
 
                 $rootScope.$watch(function() {
-                    var temp$storage;
-                    _debounce || (_debounce = $timeout(function() {
-                        _debounce = null;
-
-                        if (!angular.equals($storage, _last$storage)) {
-                            temp$storage = angular.copy(_last$storage);
-                            angular.forEach($storage, function(v, k) {
-                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
-
-                                delete temp$storage[k];
-                            });
-
-                            for (var k in temp$storage) {
-                                webStorage.removeItem('ngStorage-' + k);
-                            }
-
-                            _last$storage = angular.copy($storage);
-                        }
-                    }, 100, false));
+                    _debounce || (_debounce = $timeout($storage.$apply, 100, false));
                 });
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
@@ -148,6 +151,10 @@
                         $rootScope.$apply();
                     }
                 });
+
+                $window.addEventListener('beforeunload', function(event) {
+                    $storage.$apply();
+                }, false);
 
                 return $storage;
             }
