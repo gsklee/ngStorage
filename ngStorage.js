@@ -12,6 +12,17 @@
 }(this , function (angular) {
     'use strict';
 
+    var STORAGE_PREFIX = 'ngStorage-',
+        prefixLength = STORAGE_PREFIX.length,
+        noop = function() {},
+        getStorageKey = function(key) {
+            return key.slice(prefixLength);
+        },
+        decode = angular.fromJson,
+        encode = angular.toJson,
+        copy = angular.copy,
+        isDefined = angular.isDefined;
+
     /**
      * @ngdoc overview
      * @name ngStorage
@@ -73,8 +84,8 @@
                         var key = '__' + Math.round(Math.random() * 1e7);
 
                         try {
-                            localStorage.setItem(key, key);
-                            localStorage.removeItem(key);
+                            supported.setItem(key, key);
+                            supported.removeItem(key);
                         }
                         catch (err) {
                             supported = false;
@@ -85,11 +96,11 @@
                 }
 
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
-                var webStorage = isStorageSupported(storageType) || ($log.warn('This browser does not support Web Storage!'), {setItem: function() {}, getItem: function() {}}),
+                var webStorage = isStorageSupported(storageType) || ($log.warn('This browser does not support Web Storage!'), {setItem: noop, getItem: noop, removeItem: noop, key: noop}),
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
-                                angular.isDefined($storage[k]) || ($storage[k] = items[k]);
+                                isDefined($storage[k]) || ($storage[k] = items[k]);
                             }
 
                             $storage.$sync();
@@ -97,15 +108,21 @@
                         },
                         $reset: function(items) {
                             for (var k in $storage) {
-                                '$' === k[0] || (delete $storage[k] && webStorage.removeItem('ngStorage-' + k));
+                                '$' === k[0] || (delete $storage[k] && webStorage.removeItem(STORAGE_PREFIX + k));
                             }
 
                             return $storage.$default(items);
                         },
                         $sync: function () {
-                            for (var i = 0, l = webStorage.length, k; i < l; i++) {
+                            var i = webStorage.length,
+                                $storageKey,
+                                k;
+
+                            while (i--) {
+                                k = webStorage.key(i);
+                                $storageKey = getStorageKey(k);
                                 // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
-                                (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                                k && STORAGE_PREFIX + $storageKey === k && ($storage[$storageKey] = decode(webStorage.getItem(k)));
                             }
                         },
                         $apply: function () {
@@ -114,19 +131,19 @@
                             _debounce = null;
 
                             if (!angular.equals($storage, _last$storage)) {
-                                temp$storage = angular.copy(_last$storage);
+                                temp$storage = copy(_last$storage);
 
                                 angular.forEach($storage, function(v, k) {
-                                    angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
+                                    isDefined(v) && '$' !== k[0] && webStorage.setItem(STORAGE_PREFIX + k, encode(v));
 
                                     delete temp$storage[k];
                                 });
 
                                 for (var k in temp$storage) {
-                                    webStorage.removeItem('ngStorage-' + k);
+                                    webStorage.removeItem(STORAGE_PREFIX + k);
                                 }
 
-                                _last$storage = angular.copy($storage);
+                                _last$storage = copy($storage);
                             }
                         }
                     },
@@ -135,7 +152,7 @@
 
                 $storage.$sync();
 
-                _last$storage = angular.copy($storage);
+                _last$storage = copy($storage);
 
                 $rootScope.$watch(function() {
                     _debounce || (_debounce = $timeout($storage.$apply, 100, false));
@@ -143,10 +160,14 @@
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 $window.addEventListener && $window.addEventListener('storage', function(event) {
-                    if ('ngStorage-' === event.key.slice(0, 10)) {
-                        event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
+                    var key = event.key,
+                        newValue = event.newValue,
+                        $storageKey = getStorageKey(key);
 
-                        _last$storage = angular.copy($storage);
+                    if (key === STORAGE_PREFIX + $storageKey) {
+                        newValue ? $storage[$storageKey] = decode(newValue) : delete $storage[$storageKey];
+
+                        _last$storage = copy($storage);
 
                         $rootScope.$apply();
                     }
