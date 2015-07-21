@@ -12,6 +12,10 @@
 }(this , function (angular) {
     'use strict';
 
+    // RequireJS does not pass in Angular to us (will be undefined).
+    // Fallback to window which should mostly be there.
+    angular = angular || window.angular;
+
     /**
      * @ngdoc overview
      * @name ngStorage
