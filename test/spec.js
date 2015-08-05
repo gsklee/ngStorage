@@ -26,7 +26,7 @@ describe('ngStorage', function() {
 
         describe('$' + storageType, function() {
 
-            var $window, $rootScope, $storage, $timeout;
+            var $window, $rootScope, $storage, $storageProvider, $timeout;
 
             function initStorage(initialValues) {
 
@@ -52,9 +52,10 @@ describe('ngStorage', function() {
                     key: function(i) { return Object.keys(this.data)[i]; }
                 };
 
-                module(function($provide) {
+                module(['$provide', '$' + storageType + 'Provider', function($provide, _$storageProvider_) {
                     $provide.value('$window', $window);
-                });
+                    $storageProvider = _$storageProvider_;
+                }]);
 
                 inject(['$rootScope', '$' + storageType, '$timeout',
                     function(_$rootScope_, _$storage_, _$timeout) {
@@ -320,9 +321,29 @@ describe('ngStorage', function() {
                 });
             });
 
+            describe('when the key prefix is changed', function() {
+
+                beforeEach(function() {
+                    initStorage({});
+                    $storageProvider.setKeyPrefix('foo-');
+                });
+
+                it('should reflect the change', function(done) {
+                    $storage.bar = 'baz';
+                    $rootScope.$digest();
+
+                    $timeout.flush();
+
+                    setTimeout(function() {
+                        expect($window[storageType].getItem('foo-bar')).to.not.be.undefined;
+                        done();
+                    }, 125);
+
+                });
+
+            });
+
         });
     }
 
 });
-
-

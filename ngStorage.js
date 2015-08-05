@@ -43,6 +43,15 @@
 
     function _storageProvider(storageType) {
         return function () {
+          var storageKeyPrefix = 'ngStorage-';
+
+          this.setKeyPrefix = function (prefix) {
+            if (typeof prefix !== 'string') {
+              throw new TypeError('[ngStorage] - ' + storageType + 'Provider.setKeyPrefix() expects a String.');
+            }
+            storageKeyPrefix = prefix;
+          };
+
           this.$get = [
               '$rootScope',
               '$window',
@@ -102,7 +111,7 @@
                         },
                         $reset: function(items) {
                             for (var k in $storage) {
-                                '$' === k[0] || (delete $storage[k] && webStorage.removeItem('ngStorage-' + k));
+                                '$' === k[0] || (delete $storage[k] && webStorage.removeItem(storageKeyPrefix + k));
                             }
 
                             return $storage.$default(items);
@@ -110,7 +119,7 @@
                         $sync: function () {
                             for (var i = 0, l = webStorage.length, k; i < l; i++) {
                                 // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
-                                (k = webStorage.key(i)) && 'ngStorage-' === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                                (k = webStorage.key(i)) && storageKeyPrefix === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
                             }
                         }
                     },
@@ -129,13 +138,13 @@
                         if (!angular.equals($storage, _last$storage)) {
                             temp$storage = angular.copy(_last$storage);
                             angular.forEach($storage, function(v, k) {
-                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem('ngStorage-' + k, angular.toJson(v));
+                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem(storageKeyPrefix + k, angular.toJson(v));
 
                                 delete temp$storage[k];
                             });
 
                             for (var k in temp$storage) {
-                                webStorage.removeItem('ngStorage-' + k);
+                                webStorage.removeItem(storageKeyPrefix + k);
                             }
 
                             _last$storage = angular.copy($storage);
@@ -145,7 +154,7 @@
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 $window.addEventListener && $window.addEventListener('storage', function(event) {
-                    if ('ngStorage-' === event.key.slice(0, 10)) {
+                    if (storageKeyPrefix === event.key.slice(0, 10)) {
                         event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
 
                         _last$storage = angular.copy($storage);
