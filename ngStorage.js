@@ -30,7 +30,7 @@
      * @requires $window
      */
 
-    .factory('$localStorage', _storageFactory('localStorage'))
+    .provider('$localStorage', _storageProvider('localStorage'))
 
     /**
      * @ngdoc object
@@ -39,21 +39,22 @@
      * @requires $window
      */
 
-    .factory('$sessionStorage', _storageFactory('sessionStorage'));
+    .provider('$sessionStorage', _storageProvider('sessionStorage'));
 
-    function _storageFactory(storageType) {
-        return [
-            '$rootScope',
-            '$window',
-            '$log',
-            '$timeout',
+    function _storageProvider(storageType) {
+        return function () {
+          this.$get = [
+              '$rootScope',
+              '$window',
+              '$log',
+              '$timeout',
 
-            function(
-                $rootScope,
-                $window,
-                $log,
-                $timeout
-            ){
+              function(
+                  $rootScope,
+                  $window,
+                  $log,
+                  $timeout
+              ){
                 function isStorageSupported(storageType) {
 
                     // Some installations of IE, for an unknown reason, throw "SCRIPT5: Error: Access is denied"
@@ -156,6 +157,7 @@
                 return $storage;
             }
         ];
+      };
     }
 
 }));
