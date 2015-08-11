@@ -52,6 +52,25 @@
             storageKeyPrefix = prefix;
           };
 
+          var serializer = angular.toJson;
+          var deserializer = angular.fromJson;
+
+          this.setSerializer = function (s) {
+            if (typeof s !== 'function') {
+              throw new TypeError('[ngStorage] - ' + storageType + 'Provider.setSerializer expects a function.');
+            }
+
+            serializer = s;
+          };
+
+          this.setDeserializer = function (d) {
+            if (typeof d !== 'function') {
+              throw new TypeError('[ngStorage] - ' + storageType + 'Provider.setDeserializer expects a function.');
+            }
+
+            deserializer = s;
+          };
+
           this.$get = [
               '$rootScope',
               '$window',
@@ -119,7 +138,7 @@
                         $sync: function () {
                             for (var i = 0, l = webStorage.length, k; i < l; i++) {
                                 // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
-                                (k = webStorage.key(i)) && storageKeyPrefix === k.slice(0, 10) && ($storage[k.slice(10)] = angular.fromJson(webStorage.getItem(k)));
+                                (k = webStorage.key(i)) && storageKeyPrefix === k.slice(0, 10) && ($storage[k.slice(10)] = deserializer(webStorage.getItem(k)));
                             }
                         }
                     },
@@ -138,7 +157,7 @@
                         if (!angular.equals($storage, _last$storage)) {
                             temp$storage = angular.copy(_last$storage);
                             angular.forEach($storage, function(v, k) {
-                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem(storageKeyPrefix + k, angular.toJson(v));
+                                angular.isDefined(v) && '$' !== k[0] && webStorage.setItem(storageKeyPrefix + k, serializer(v));
 
                                 delete temp$storage[k];
                             });
@@ -155,7 +174,7 @@
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 $window.addEventListener && $window.addEventListener('storage', function(event) {
                     if (storageKeyPrefix === event.key.slice(0, 10)) {
-                        event.newValue ? $storage[event.key.slice(10)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(10)];
+                        event.newValue ? $storage[event.key.slice(10)] = deserializer(event.newValue) : delete $storage[event.key.slice(10)];
 
                         _last$storage = angular.copy($storage);
 
