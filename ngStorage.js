@@ -68,7 +68,7 @@
               throw new TypeError('[ngStorage] - ' + storageType + 'Provider.setDeserializer expects a function.');
             }
 
-            deserializer = s;
+            deserializer = d;
           };
 
           this.$get = [
