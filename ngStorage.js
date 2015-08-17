@@ -71,6 +71,16 @@
             deserializer = d;
           };
 
+          // Note: This is not very elegant at all.
+          this.get = function (key) {
+            return deserializer(window[storageType].getItem(storageKeyPrefix + key));
+          };
+
+          // Note: This is not very elegant at all.
+          this.set = function (key, value) {
+            return window[storageType].setItem(key, serializer(value));
+          };
+
           this.$get = [
               '$rootScope',
               '$window',
