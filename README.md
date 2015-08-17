@@ -170,14 +170,14 @@ var app = angular.module('app', ['ngStorage'])
 
 ### Prefix
 
-To change the prefix used by ngStorage use the provider function `setPrefixKey`
+To change the prefix used by ngStorage use the provider function `setKeyPrefix`
 during the config phase.
 
 ```javascript
 var app = angular.module('app', ['ngStorage'])
 .config(['$localStorageProvider',
     function ($localStorageProvider) {
-        $localStorageProvider.setPrefixKey('NewPrefix');
+        $localStorageProvider.setKeyPrefix('NewPrefix');
     }])
 ```
 
