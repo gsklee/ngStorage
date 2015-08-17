@@ -153,6 +153,34 @@ You can store anything except those [not supported by JSON](http://www.json.org/
 * `Infinity`, `NaN` - Will be replaced with `null`.
 * `undefined`, Function - Will be removed.
 
+### Usage from config phase
+
+To read and set values during the Angular config phase use the `.get/.set`
+functions provided by the provider.
+
+```javascript
+var app = angular.module('app', ['ngStorage'])
+.config(['$localStorageProvider',
+    function ($localStorageProvider) {
+        $localStorageProvider.get('MyKey');
+
+        $localStorageProvder.set('MyKey', { k: 'value' });
+    }]);
+```
+
+### Prefix
+
+To change the prefix used by ngStorage use the provider function `setPrefixKey`
+during the config phase.
+
+```javascript
+var app = angular.module('app', ['ngStorage'])
+.config(['$localStorageProvider',
+    function ($localStorageProvider) {
+        $localStorageProvider.setPrefixKey('NewPrefix');
+    }])
+```
+
 ### Minification
 Just run `$ npm install` to install dependencies.  Then run `$ grunt` for minification.
 
@@ -160,7 +188,7 @@ Just run `$ npm install` to install dependencies.  Then run `$ grunt` for minifi
 
 #### Watch the watch
 
-ngStorage internally uses an Angular watch to monitor changes to the `$storage`/`$localStorage` objects. That means that a digest cycle is required to persist your new values into the browser local storage. 
+ngStorage internally uses an Angular watch to monitor changes to the `$storage`/`$localStorage` objects. That means that a digest cycle is required to persist your new values into the browser local storage.
 Normally this is not a problem, but, for example, if you launch a new window after saving a value...
 
 ```javascript
