@@ -14,7 +14,7 @@
 
     // RequireJS does not pass in Angular to us (will be undefined).
     // Fallback to window which should mostly be there.
-    angular = angular || window.angular;
+    angular = (angular && angular.module ) ? angular : window.angular;
 
     /**
      * @ngdoc overview
