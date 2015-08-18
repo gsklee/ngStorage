@@ -196,6 +196,10 @@
                     }
                 });
 
+                $window.addEventListener && $window.addEventListener('beforeunload', function(event) {
+                  $storage.$sync();
+                });
+
                 return $storage;
             }
         ];
