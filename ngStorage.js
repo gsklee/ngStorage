@@ -127,6 +127,10 @@
                     return supported;
                 }
 
+                // The magic number 10 is used which only works for some keyPrefixes...
+                // See https://github.com/gsklee/ngStorage/issues/137
+                var prefixLength = storageKeyPrefix.length;
+
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
                 var webStorage = isStorageSupported(storageType) || ($log.warn('This browser does not support Web Storage!'), {setItem: angular.noop, getItem: angular.noop}),
                     $storage = {
@@ -148,7 +152,7 @@
                         $sync: function () {
                             for (var i = 0, l = webStorage.length, k; i < l; i++) {
                                 // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
-                                (k = webStorage.key(i)) && storageKeyPrefix === k.slice(0, 10) && ($storage[k.slice(10)] = deserializer(webStorage.getItem(k)));
+                                (k = webStorage.key(i)) && storageKeyPrefix === k.slice(0, prefixLength) && ($storage[k.slice(prefixLength)] = deserializer(webStorage.getItem(k)));
                             }
                         }
                     },
@@ -183,8 +187,8 @@
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 $window.addEventListener && $window.addEventListener('storage', function(event) {
-                    if (storageKeyPrefix === event.key.slice(0, 10)) {
-                        event.newValue ? $storage[event.key.slice(10)] = deserializer(event.newValue) : delete $storage[event.key.slice(10)];
+                    if (storageKeyPrefix === event.key.slice(0, prefixLength)) {
+                        event.newValue ? $storage[event.key.slice(prefixLength)] = deserializer(event.newValue) : delete $storage[event.key.slice(prefixLength)];
 
                         _last$storage = angular.copy($storage);
 
