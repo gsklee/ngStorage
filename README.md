@@ -181,6 +181,28 @@ var app = angular.module('app', ['ngStorage'])
     }])
 ```
 
+### Custom serialization
+
+To change how ngStorage serializes and deserializes values (uses JSON by default) you can use your own functions.
+
+```javascript
+angular.module('app', ['ngStorage'])
+.config(['$localStorageProvider', 
+  function ($localStorageProvider) {
+    var mySerializer = function (value) {
+      // Do what you want with the value.
+      return value;
+    };
+    
+    var myDeserializer = function (value) {
+      return value;
+    };
+
+    $localStorageProvider.setSerializer(mySerializer);
+    $localStorageProvider.setDeserializer(myDeserializer);
+  }];)
+```
+
 ### Minification
 Just run `$ npm install` to install dependencies.  Then run `$ grunt` for minification.
 
