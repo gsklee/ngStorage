@@ -199,7 +199,7 @@
                 });
 
                 $window.addEventListener && $window.addEventListener('beforeunload', function() {
-                    $storage.$sync();
+                    $storage.$apply();
                 });
 
                 return $storage;
