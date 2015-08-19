@@ -78,7 +78,7 @@
 
           // Note: This is not very elegant at all.
           this.set = function (key, value) {
-            return window[storageType].setItem(key, serializer(value));
+            return window[storageType].setItem(storageKeyPrefix + key, serializer(value));
           };
 
           this.$get = [
