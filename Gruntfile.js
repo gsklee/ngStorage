@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     ];
 
     if (process.env.TRAVIS){
-        browsers = ['PhantomJS'];
+        browsers = ['PhantomJS', 'Firefox'];
     }
 
     grunt.initConfig({
