@@ -12,8 +12,8 @@
 }(this , function (angular) {
     'use strict';
 
-    // RequireJS does not pass in Angular to us (will be undefined).
-    // Fallback to window which should mostly be there.
+    // In cases where Angular does not get passed or angular is a truthy value
+    // but misses .module we can fall back to using window.
     angular = (angular && angular.module ) ? angular : window.angular;
 
     /**
