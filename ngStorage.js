@@ -12,8 +12,8 @@
 }(this , function (angular) {
     'use strict';
 
-    // RequireJS does not pass in Angular to us (will be undefined).
-    // Fallback to window which should mostly be there.
+    // In cases where Angular does not get passed or angular is a truthy value
+    // but misses .module we can fall back to using window.
     angular = (angular && angular.module ) ? angular : window.angular;
 
     /**
@@ -164,7 +164,7 @@
                                 temp$storage = angular.copy(_last$storage);
                                 angular.forEach($storage, function(v, k) {
                                     if (angular.isDefined(v) && '$' !== k[0]) {
-                                        webStorage.setItem(storageKeyPrefix + k, serializer(v))
+                                        webStorage.setItem(storageKeyPrefix + k, serializer(v));
                                         delete temp$storage[k];
                                     }
                                 });
@@ -204,8 +204,8 @@
                 });
 
                 return $storage;
-            }
-        ];
+              }
+          ];
       };
     }
 
