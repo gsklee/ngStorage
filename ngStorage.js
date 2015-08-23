@@ -136,7 +136,7 @@
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
-                                angular.isDefined($storage[k]) || ($storage[k] = items[k]);
+                                angular.isDefined($storage[k]) || ($storage[k] = angular.copy(items[k]) );
                             }
 
                             $storage.$sync();
