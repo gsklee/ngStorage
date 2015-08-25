@@ -4,7 +4,8 @@
   if (typeof define === 'function' && define.amd) {
     define(['angular'], factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(require('angular'));
+    factory(require('angular'));
+    module.exports = 'ngStorage';
   } else {
     // Browser globals (root is window), we don't register it.
     factory(root.angular);
