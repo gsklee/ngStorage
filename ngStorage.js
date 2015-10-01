@@ -86,12 +86,14 @@
               '$window',
               '$log',
               '$timeout',
+              '$document',
 
               function(
                   $rootScope,
                   $window,
                   $log,
-                  $timeout
+                  $timeout,
+                  $document
               ){
                 function isStorageSupported(storageType) {
 
@@ -190,7 +192,12 @@
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 $window.addEventListener && $window.addEventListener('storage', function(event) {
-                    if (storageKeyPrefix === event.key.slice(0, prefixLength)) {
+                    // Reference doc.
+                    var doc = $document[0];
+                    // Figure out if hasFocus / hasFocus() exists.
+                    var hasDocFocus = angular.isDefined(doc.hasFocus);
+
+                    if ( ( hasDocFocus ? (doc.hasFocus || doc.hasFocus()) : true ) && storageKeyPrefix === event.key.slice(0, prefixLength) ) {
                         event.newValue ? $storage[event.key.slice(prefixLength)] = deserializer(event.newValue) : delete $storage[event.key.slice(prefixLength)];
 
                         _last$storage = angular.copy($storage);
