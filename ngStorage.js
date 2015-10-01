@@ -197,7 +197,7 @@
                     // Figure out if hasFocus / hasFocus() exists.
                     var hasDocFocus = angular.isDefined(doc.hasFocus);
 
-                    if ( ( hasDocFocus ? (doc.hasFocus || doc.hasFocus()) : true ) && storageKeyPrefix === event.key.slice(0, prefixLength) ) {
+                    if ( ( hasDocFocus ? (!doc.hasFocus || !doc.hasFocus()) : true ) && storageKeyPrefix === event.key.slice(0, prefixLength) ) {
                         event.newValue ? $storage[event.key.slice(prefixLength)] = deserializer(event.newValue) : delete $storage[event.key.slice(prefixLength)];
 
                         _last$storage = angular.copy($storage);
