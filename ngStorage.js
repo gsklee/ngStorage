@@ -192,6 +192,10 @@
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 $window.addEventListener && $window.addEventListener('storage', function(event) {
+                    if (!event.key) {
+                      return;
+                    }
+
                     // Reference doc.
                     var doc = $document[0];
 
