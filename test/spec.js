@@ -54,6 +54,7 @@ describe('ngStorage', function() {
 
                 module(['$provide', '$' + storageType + 'Provider', function($provide, _$storageProvider_) {
                     $provide.value('$window', $window);
+                    $provide.value('$document', angular.element(document));
                     $storageProvider = _$storageProvider_;
                 }]);
 
