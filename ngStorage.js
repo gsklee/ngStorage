@@ -12,8 +12,8 @@
 }(this , function (angular) {
     'use strict';
 
-    // In cases where Angular does not get passed or angular is a truthy value
-    // but misses .module we can fall back to using window.
+    // RequireJS does not pass in Angular to us (will be undefined).
+    // Fallback to window which should mostly be there.
     angular = (angular && angular.module ) ? angular : window.angular;
 
     /**
@@ -86,14 +86,12 @@
               '$window',
               '$log',
               '$timeout',
-              '$document',
 
               function(
                   $rootScope,
                   $window,
                   $log,
-                  $timeout,
-                  $document
+                  $timeout
               ){
                 function isStorageSupported(storageType) {
 
@@ -134,11 +132,12 @@
                 var prefixLength = storageKeyPrefix.length;
 
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
+                //Added angular.noop to the removeItem method.
                 var webStorage = isStorageSupported(storageType) || ($log.warn('This browser does not support Web Storage!'), {setItem: angular.noop, getItem: angular.noop, removeItem: angular.noop}),
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
-                                angular.isDefined($storage[k]) || ($storage[k] = angular.copy(items[k]) );
+                                angular.isDefined($storage[k]) || ($storage[k] = items[k]);
                             }
 
                             $storage.$sync();
@@ -166,7 +165,7 @@
                                 temp$storage = angular.copy(_last$storage);
                                 angular.forEach($storage, function(v, k) {
                                     if (angular.isDefined(v) && '$' !== k[0]) {
-                                        webStorage.setItem(storageKeyPrefix + k, serializer(v));
+                                        webStorage.setItem(storageKeyPrefix + k, serializer(v))
                                         delete temp$storage[k];
                                     }
                                 });
@@ -192,14 +191,7 @@
 
                 // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
                 $window.addEventListener && $window.addEventListener('storage', function(event) {
-                    if (!event.key) {
-                      return;
-                    }
-
-                    // Reference doc.
-                    var doc = $document[0];
-
-                    if ( (!doc.hasFocus || !doc.hasFocus()) && storageKeyPrefix === event.key.slice(0, prefixLength) ) {
+                    if (storageKeyPrefix === event.key.slice(0, prefixLength)) {
                         event.newValue ? $storage[event.key.slice(prefixLength)] = deserializer(event.newValue) : delete $storage[event.key.slice(prefixLength)];
 
                         _last$storage = angular.copy($storage);
@@ -213,8 +205,8 @@
                 });
 
                 return $storage;
-              }
-          ];
+            }
+        ];
       };
     }
 
