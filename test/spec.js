@@ -21,8 +21,10 @@ describe('ngStorage', function() {
 
     describeStorageBehaviorFor('localStorage');
     describeStorageBehaviorFor('sessionStorage');
+    describeStorageBehaviorFor('localStorage', true);
+    describeStorageBehaviorFor('sessionStorage', true);
 
-    function describeStorageBehaviorFor(storageType) {
+    function describeStorageBehaviorFor(storageType, testProviderConfig) {
 
         describe('$' + storageType, function() {
 
@@ -56,6 +58,17 @@ describe('ngStorage', function() {
                     $provide.value('$window', $window);
                     $provide.value('$document', angular.element(document));
                     $storageProvider = _$storageProvider_;
+
+                    if (testProviderConfig) { // some sample custom config here.
+                        $storageProvider.setSerializer(angular.toJson);
+                        $storageProvider.setDeserializer(angular.fromJson);
+                        $storageProvider.setObjCopy(
+                            function(src) {
+                                //console.log(angular.toJson(src));
+                                return angular.fromJson(angular.toJson(src))
+                            });
+                        $storageProvider.setObjEquals(angular.equals);
+                    }
                 }]);
 
                 inject(['$rootScope', '$' + storageType, '$timeout',
