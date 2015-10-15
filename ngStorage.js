@@ -177,7 +177,7 @@
 
                                 _last$storage = angular.copy($storage);
                             }
-                        },
+                        }
                     },
                     _last$storage,
                     _debounce;
