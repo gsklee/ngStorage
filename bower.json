@@ -1,6 +1,6 @@
 {
     "name": "ngstorage",
-    "version": "0.3.11",
+    "version": "0.3.10",
     "main": "./ngStorage.js",
     "keywords": [
         "angular",
@@ -31,6 +31,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/sime/ngStorage.git"
+        "url": "git://github.com/gsklee/ngStorage.git"
     }
 }
