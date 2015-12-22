@@ -81,6 +81,15 @@
             return window[storageType].setItem(storageKeyPrefix + key, serializer(value));
           };
 
+	  this.getObject = function (key) {    
+	    var value = deserializer(window[storageType].getItem(storageKeyPrefix + key));
+	    return value && JSON.parse(value);
+          };
+
+          this.setObject = function(key, obj) {
+	    return window[storageType].setItem(storageKeyPrefix + key, serializer(JSON.stringify(value)));
+	  }
+
           this.$get = [
               '$rootScope',
               '$window',
