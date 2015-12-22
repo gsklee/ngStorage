@@ -16,6 +16,41 @@
     // but misses .module we can fall back to using window.
     angular = (angular && angular.module ) ? angular : window.angular;
 
+
+    function isStorageSupported($window, storageType) {
+
+      // Some installations of IE, for an unknown reason, throw "SCRIPT5: Error: Access is denied"
+      // when accessing window.localStorage. This happens before you try to do anything with it. Catch
+      // that error and allow execution to continue.
+
+      // fix 'SecurityError: DOM Exception 18' exception in Desktop Safari, Mobile Safari
+      // when "Block cookies": "Always block" is turned on
+      var supported;
+      try {
+        supported = $window[storageType];
+      }
+      catch(err) {
+        supported = false;
+      }
+
+      // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
+      // is available, but trying to call .setItem throws an exception below:
+      // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage that exceeded the quota."
+      if(supported && storageType === 'localStorage') {
+        var key = '__' + Math.round(Math.random() * 1e7);
+
+        try {
+          localStorage.setItem(key, key);
+          localStorage.removeItem(key);
+        }
+        catch(err) {
+          supported = false;
+        }
+      }
+
+      return supported;
+    }
+
     /**
      * @ngdoc overview
      * @name ngStorage
@@ -42,6 +77,8 @@
     .provider('$sessionStorage', _storageProvider('sessionStorage'));
 
     function _storageProvider(storageType) {
+        var providerWebStorage = isStorageSupported(window, storageType);
+
         return function () {
           var storageKeyPrefix = 'ngStorage-';
 
@@ -71,14 +108,18 @@
             deserializer = d;
           };
 
+          this.supported = function() {
+            return !!providerWebStorage;
+          };
+
           // Note: This is not very elegant at all.
           this.get = function (key) {
-            return deserializer(window[storageType].getItem(storageKeyPrefix + key));
+            return providerWebStorage && deserializer(providerWebStorage.getItem(storageKeyPrefix + key));
           };
 
           // Note: This is not very elegant at all.
           this.set = function (key, value) {
-            return window[storageType].setItem(storageKeyPrefix + key, serializer(value));
+            return providerWebStorage && providerWebStorage.setItem(storageKeyPrefix + key, serializer(value));
           };
 
           this.$get = [
@@ -95,46 +136,15 @@
                   $timeout,
                   $document
               ){
-                function isStorageSupported(storageType) {
-
-                    // Some installations of IE, for an unknown reason, throw "SCRIPT5: Error: Access is denied"
-                    // when accessing window.localStorage. This happens before you try to do anything with it. Catch
-                    // that error and allow execution to continue.
-
-                    // fix 'SecurityError: DOM Exception 18' exception in Desktop Safari, Mobile Safari
-                    // when "Block cookies": "Always block" is turned on
-                    var supported;
-                    try {
-                        supported = $window[storageType];
-                    }
-                    catch (err) {
-                        supported = false;
-                    }
-
-                    // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage
-                    // is available, but trying to call .setItem throws an exception below:
-                    // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage that exceeded the quota."
-                    if (supported && storageType === 'localStorage') {
-                        var key = '__' + Math.round(Math.random() * 1e7);
-
-                        try {
-                            localStorage.setItem(key, key);
-                            localStorage.removeItem(key);
-                        }
-                        catch (err) {
-                            supported = false;
-                        }
-                    }
-
-                    return supported;
-                }
 
                 // The magic number 10 is used which only works for some keyPrefixes...
                 // See https://github.com/gsklee/ngStorage/issues/137
                 var prefixLength = storageKeyPrefix.length;
 
                 // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
-                var webStorage = isStorageSupported(storageType) || ($log.warn('This browser does not support Web Storage!'), {setItem: angular.noop, getItem: angular.noop, removeItem: angular.noop}),
+                // Note: recheck mainly for testing (so we can use $window[storageType] rather than window[storageType])
+                var isSupported = isStorageSupported($window, storageType),
+                    webStorage = isSupported || ($log.warn('This browser does not support Web Storage!'), {setItem: angular.noop, getItem: angular.noop, removeItem: angular.noop}),
                     $storage = {
                         $default: function(items) {
                             for (var k in items) {
@@ -177,6 +187,9 @@
 
                                 _last$storage = angular.copy($storage);
                             }
+                        },
+                        $supported: function() {
+                            return !!isSupported;
                         }
                     },
                     _last$storage,

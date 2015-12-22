@@ -28,7 +28,7 @@ describe('ngStorage', function() {
 
             var $window, $rootScope, $storage, $storageProvider, $timeout;
 
-            function initStorage(initialValues) {
+            function initStorage(initialValues, notSupported) {
 
                 $window = {
                     eventHandlers: {},
@@ -37,20 +37,24 @@ describe('ngStorage', function() {
                     }
                 };
 
-                $window[storageType] = {
-                    length: Object.keys(initialValues).length,
-                    data: initialValues,
-                    getItem: function(key) { return this.data[key]; },
-                    setItem: function(key, value) {
-                        this.data[key] = value;
-                        this.length = Object.keys(this.data).length;
-                    },
-                    removeItem: function(key) {
-                        delete this.data[key];
-                        this.length = Object.keys(this.data).length;
-                    },
-                    key: function(i) { return Object.keys(this.data)[i]; }
-                };
+                if(notSupported) {
+                    $window[storageType] = false;
+                } else {
+                    $window[storageType] = {
+                      length: Object.keys(initialValues).length,
+                      data: initialValues,
+                      getItem: function(key) { return this.data[key]; },
+                      setItem: function(key, value) {
+                          this.data[key] = value;
+                          this.length = Object.keys(this.data).length;
+                      },
+                      removeItem: function(key) {
+                          delete this.data[key];
+                          this.length = Object.keys(this.data).length;
+                      },
+                      key: function(i) { return Object.keys(this.data)[i]; }
+                    };
+                }
 
                 module(['$provide', '$' + storageType + 'Provider', function($provide, _$storageProvider_) {
                     $provide.value('$window', $window);
@@ -68,6 +72,11 @@ describe('ngStorage', function() {
 
             }
 
+            it('should expose whether it is supported', function() {
+                initStorage({});
+                expect($storage.$supported()).to.equal(true);
+            });
+
             it('should, upon loading, contain a value for each ngStorage- key in window.' +
                 storageType, function() {
 
@@ -83,6 +92,7 @@ describe('ngStorage', function() {
                 delete $storage.$reset;
                 delete $storage.$sync;
                 delete $storage.$apply;
+                delete $storage.$supported;
 
                 expect($storage).to.deep.equal({
                     string: 'a string',
@@ -174,6 +184,7 @@ describe('ngStorage', function() {
                     delete $storage.$reset;
                     delete $storage.$sync;
                     delete $storage.$apply;
+                    delete $storage.$supported;
 
                     expect($storage).to.deep.equal({});
 
@@ -214,6 +225,7 @@ describe('ngStorage', function() {
                     delete $storage.$reset;
                     delete $storage.$sync;
                     delete $storage.$apply;
+                    delete $storage.$supported;
 
                     expect($storage).to.deep.equal({some: 'value'});
 
@@ -345,6 +357,27 @@ describe('ngStorage', function() {
 
                 });
 
+            });
+
+            describe('when storage is not supported', function() {
+                beforeEach(function() {
+                    initStorage({ 'ngStorage-existing': true }, true);
+                });
+                it('should expose whether it is supported', function() {
+                    expect($storage.$supported()).to.equal(false);
+                });
+                it('should still function', function(done) {
+                    expect($storage.existing).to.be.undefined;
+                    $storage.bar = 'baz';
+                    $rootScope.$digest();
+
+                    $timeout.flush();
+
+                    setTimeout(function() {
+                        expect($storage.bar).to.not.be.undefined;
+                        done();
+                    }, 125);
+                });
             });
 
         });
