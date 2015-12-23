@@ -87,13 +87,15 @@
               '$log',
               '$timeout',
               '$document',
+              '$injector',
 
               function(
                   $rootScope,
                   $window,
                   $log,
                   $timeout,
-                  $document
+                  $document,
+                  $injector
               ){
                 function isStorageSupported(storageType) {
 
