@@ -212,6 +212,18 @@
                     $storage.$apply();
                 });
 
+                if ($injector.has('$state')) {
+                    $rootScope.$on('$stateChangeStart', function () {
+                        $storage.$apply();
+                    });
+                }
+
+                if ($injector.has('$route')) {
+                    $rootScope.$on('$routeChangeStart', function() {
+                        $storage.$apply();
+                    });
+                }
+
                 return $storage;
               }
           ];
