@@ -35,6 +35,14 @@ npm install ngstorage
 
 *NOTE:* We are `ngstorage` and *NOT* `ngStorage`. The casing is important!
 
+### nuget
+
+```bash
+Install-Package gsklee.ngStorage
+```
+
+Or search for `Angular ngStorage` in the nuget package manager. <https://www.nuget.org/packages/gsklee.ngStorage>
+
 CDN
 ===
 
