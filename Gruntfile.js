@@ -22,7 +22,8 @@ module.exports = function(grunt) {
                         'components/angular-mocks/angular-mocks.js',
                         'components/chai/chai.js',
                         'ngStorage.js',
-                        'test/spec.js'
+                        'test/spec.js',
+                        'node_modules/phantomjs-polyfill/bind-polyfill.js'
                     ]
                 },
 
