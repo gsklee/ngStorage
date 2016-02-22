@@ -28,7 +28,8 @@
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
     "mocha": "^2.2.4",
-    "phantomjs": "^1.9.17"
+    "phantomjs": "^1.9.17",
+    "phantomjs-polyfill": "0.0.1"
   },
   "dependencies": {}
 }
