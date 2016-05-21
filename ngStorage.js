@@ -107,6 +107,16 @@
             deserializer = d;
           };
 
+          this.setStorageCookie = function(exp, path) {
+            var date = new Date();
+            var exp = exp || 365;
+            var path = path || "/";
+            date.setTime(+date + (exp * 86400000));
+            document.cookie = "expires=" + date.toGMTString() + "; path=" +
+              path;
+            return this;
+          };
+
           this.supported = function() {
             return !!providerWebStorage;
           };
