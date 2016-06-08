@@ -121,6 +121,10 @@
             return providerWebStorage && providerWebStorage.setItem(storageKeyPrefix + key, serializer(value));
           };
 
+          this.remove = function (key) {
+            providerWebStorage && providerWebStorage.removeItem(storageKeyPrefix + key);
+          }
+
           this.$get = [
               '$rootScope',
               '$window',
