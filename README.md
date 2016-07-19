@@ -239,6 +239,17 @@ $timeout(function(){
 });
 ```
 
+or better using `$scope.$evalAsync` as:
+
+```javascript
+$scope.$storage.school = theSchool;
+$log.debug("launching and saving the new value" + url);
+$scope.$evalAsync(function(){
+   var myWindow = $window.open("", "_self");
+   myWindow.document.write(response.data);
+});
+```
+
 And your new values will be persisted correctly.
 
 Todos
