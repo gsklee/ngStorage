@@ -178,7 +178,7 @@
                             if (!angular.equals($storage, _last$storage)) {
                                 temp$storage = angular.copy(_last$storage);
                                 angular.forEach($storage, function(v, k) {
-                                    if (angular.isDefined(v) && '$' !== k[0]) {
+                                    if (!angular.equals(v, _last$storage[k]) && angular.isDefined(v) && '$' !== k[0]) {
                                         webStorage.setItem(storageKeyPrefix + k, serializer(v));
                                         delete temp$storage[k];
                                     }
