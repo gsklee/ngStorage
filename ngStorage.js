@@ -28,7 +28,8 @@
       // when "Block cookies": "Always block" is turned on
       var supported;
       try {
-        supported = $window[storageType];
+        var key = '__' + Math.round(Math.random() * 1e7);
+        supported = $window[storageType].setItem(key, key);
       }
       catch(err) {
         supported = false;
