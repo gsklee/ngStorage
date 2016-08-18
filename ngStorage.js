@@ -190,6 +190,8 @@
                                 }
 
                                 _last$storage = angular.copy($storage);
+
+                               $rootScope.$broadcast('$ngStorageChanged');
                             }
                         },
                         $supported: function() {
