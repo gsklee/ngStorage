@@ -89,8 +89,23 @@
             storageKeyPrefix = prefix;
           };
 
-          var serializer = angular.toJson;
-          var deserializer = angular.fromJson;
+          var serializer = function (value){
+              try {
+                  return angular.toJson(value);
+              }
+              catch (err){
+                  return value;
+              }
+          };
+          
+          var deserializer = function (value){
+              try {
+                  return angular.fromJson(value);
+              }
+              catch (err){
+                  return value;
+              }
+          };
 
           this.setSerializer = function (s) {
             if (typeof s !== 'function') {
