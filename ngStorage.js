@@ -224,8 +224,15 @@
                         $rootScope.$apply();
                     }
                 });
+				
+				
 
                 $window.addEventListener && $window.addEventListener('beforeunload', function() {
+                    $storage.$apply();
+                });
+				
+				// workaround for IOS devices (IPhone, IPad) with older WebKit version
+				$window.addEventListener && $window.addEventListener('pagehide', function() {
                     $storage.$apply();
                 });
 
