@@ -159,7 +159,7 @@ $localStorage.$reset();
 You can store anything except those [not supported by JSON](http://www.json.org/js.html):
 
 * `Infinity`, `NaN` - Will be replaced with `null`.
-* `undefined`, Function - Will be removed.
+* `undefined`, `Function` - Will be removed.
 
 ### Usage from config phase
 
