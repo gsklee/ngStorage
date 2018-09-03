@@ -115,6 +115,7 @@ $scope.counter = $localStorage.counter || 42;
 
 $scope.$watch('counter', function() {
     $localStorage.counter = $scope.counter;
+    $localStorage.$apply();
 });
 
 $scope.$watch(function() {
@@ -223,6 +224,8 @@ Normally this is not a problem, but, for example, if you launch a new window aft
 
 ```javascript
 $scope.$storage.school = theSchool;
+$scope.$storage.$apply();
+
 $log.debug("launching " + url);
 var myWindow = $window.open("", "_self");
 myWindow.document.write(response.data);
@@ -232,6 +235,7 @@ the new values will not reliably be saved into the browser local storage. Allow 
 
 ```javascript
 $scope.$storage.school = theSchool;
+$scope.$storage.$apply();
 $log.debug("launching and saving the new value" + url);
 $timeout(function(){
    var myWindow = $window.open("", "_self");
@@ -243,6 +247,8 @@ or better using `$scope.$evalAsync` as:
 
 ```javascript
 $scope.$storage.school = theSchool;
+$scope.$storage.$apply();
+
 $log.debug("launching and saving the new value" + url);
 $scope.$evalAsync(function(){
    var myWindow = $window.open("", "_self");
