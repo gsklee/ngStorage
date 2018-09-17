@@ -62,7 +62,7 @@ jsDelivr hosts ngStorage at <http://www.jsdelivr.com/#!ngstorage>
 To use is
 
 ``` html
-<script src="https://cdn.jsdelivr.net/ngstorage/0.3.10/ngStorage.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ngstorage@0.3.11/ngStorage.min.js"></script>
 ```
 
 Usage
