@@ -132,13 +132,15 @@
               '$log',
               '$timeout',
               '$document',
+              '$injector',
 
               function(
                   $rootScope,
                   $window,
                   $log,
                   $timeout,
-                  $document
+                  $document,
+                  $injector
               ){
 
                 // The magic number 10 is used which only works for some keyPrefixes...
@@ -228,6 +230,18 @@
                 $window.addEventListener && $window.addEventListener('beforeunload', function() {
                     $storage.$apply();
                 });
+
+                if ($injector.has('$state')) {
+                    $rootScope.$on('$stateChangeStart', function () {
+                        $storage.$apply();
+                    });
+                }
+
+                if ($injector.has('$route')) {
+                    $rootScope.$on('$routeChangeStart', function() {
+                        $storage.$apply();
+                    });
+                }
 
                 return $storage;
               }
