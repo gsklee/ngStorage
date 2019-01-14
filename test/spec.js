@@ -153,6 +153,27 @@ describe('ngStorage', function() {
 
             });
 
+            it('should broadcast a $ngStorageChanged event after applying changes',
+	        function (done) {
+                
+		initStorage({'ngStorage-entry': '"initial"'});
+                
+		var changedHandlerInvoked = false;
+                $rootScope.$on('$ngStorageChanged', function () {
+                     changedHandlerInvoked = true;
+		});
+		
+		$storage.entry = 'updated';
+		$rootScope.$digest();
+
+                $timeout.flush();
+
+		setTimeout(function () {
+		    expect(changedHandlerInvoked).to.equal(true);
+		    done();
+		}, 125);
+            });
+
             describe('when $reset is called with no arguments', function() {
 
                 beforeEach(function(done) {
